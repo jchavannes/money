@@ -19,6 +19,7 @@ func main() {
 				r.Write("Posts")
 			},
 		}},
+		EnableSessions: true,
 	}
 	fmt.Printf("Starting money web server on port %d\n", port)
 	server.Run()
