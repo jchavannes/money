@@ -10,6 +10,7 @@ const port = 8247
 func main() {
 	server := web.Server{
 		Port: port,
+		EnableSessions: true,
 		TemplateDirectory: "templates",
 		StaticDirectory: "public",
 		Routes: []web.Route{{
@@ -19,7 +20,6 @@ func main() {
 				r.Write("Posts")
 			},
 		}},
-		EnableSessions: true,
 	}
 	fmt.Printf("Starting money web server on port %d\n", port)
 	server.Run()
