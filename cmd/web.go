@@ -14,14 +14,6 @@ var (
 			r.Render()
 		},
 	}
-
-	postRoute = web.Route{
-		Pattern: "/post",
-		CsrfProtect: true,
-		Handler: func(r *web.Response) {
-			r.Write("Posts")
-		},
-	}
 )
 
 var (
@@ -54,7 +46,6 @@ func CmdWeb() error {
 		PreHandler: preHandler,
 		Routes: []web.Route{
 			indexRoute,
-			postRoute,
 		},
 	}
 	return server.Run()
