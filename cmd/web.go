@@ -10,7 +10,6 @@ var (
 	indexRoute = web.Route{
 		Pattern: "/",
 		Handler: func(r *web.Response) {
-			r.Helper["CsrfToken"] = r.Session.GetCsrfToken()
 			r.Render()
 		},
 	}
@@ -22,6 +21,19 @@ var (
 			r.Write("Posts")
 		},
 	}
+
+	preHandler = func(r *web.Response) {
+		r.Helper["CsrfToken"] = r.Session.GetCsrfToken()
+		r.Helper["BaseUrl"] = getBaseUrl(r)
+	}
+
+	getBaseUrl = func(r *web.Response) string {
+		baseUrl := r.Request.GetHeader("AppPath")
+		if baseUrl == "" {
+			baseUrl = "/"
+		}
+		return baseUrl
+	}
 )
 
 func CmdWeb() error {
@@ -29,7 +41,8 @@ func CmdWeb() error {
 		Port: port,
 		UseSessions: true,
 		TemplatesDir: "templates",
-		StaticFilesDir: "public",
+		StaticFilesDir: "pub",
+		PreHandler: preHandler,
 		Routes: []web.Route{
 			indexRoute,
 			postRoute,

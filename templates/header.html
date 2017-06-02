@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>Money</title>
+    <base href="{{ .BaseUrl }}" />
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="money.css"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="money.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            MoneyApp.InitCsrf("{{ .CsrfToken }}");
+            MoneyApp.SetBaseUrl("{{ .BaseUrl }}");
+        });
+    </script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand" href="{{ .BaseUrl }}"><h1>Money</h1></a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <div class="navbar-form navbar-right">
+                {{ with .Username }}
+                Logged in as <b>{{ . }}</b> &nbsp;
+                <a class="btn btn-primary" href="logout">Logout</a>
+                {{ else }}
+                <a class="btn btn-success" href="signup">Signup</a> &nbsp;
+                <a class="btn btn-primary" href="login">Login</a>
+                {{ end }}
+            </div>
+        </div>
+
+    </div>
+</nav>

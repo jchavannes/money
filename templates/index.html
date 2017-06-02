@@ -1,8 +1,16 @@
-Hello world.
+{{ template "header.html" . }}
 
-<p>{{ .CsrfToken }}</p>
+<div class="container top-container">
 
-<form action="post" method="post">
-    <input type="text" name="test" />
-    <input type="submit" />
-</form>
+    <h2>Hello world.</h2>
+
+    <p>{{ .CsrfToken }}</p>
+
+    <form action="post" method="post">
+        <input type="text" name="test" />
+        <input type="submit" />
+    </form>
+
+</div>
+
+{{ template "footer.html" . }}
