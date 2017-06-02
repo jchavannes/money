@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/jchavannes/jgo/web"
+	"net/http"
 )
 
 const port = 8247
@@ -21,7 +22,9 @@ var (
 			r.Write("Posts")
 		},
 	}
+)
 
+var (
 	preHandler = func(r *web.Response) {
 		r.Helper["CsrfToken"] = r.Session.GetCsrfToken()
 		r.Helper["BaseUrl"] = getBaseUrl(r)
@@ -34,10 +37,16 @@ var (
 		}
 		return baseUrl
 	}
+
+	notFoundHandler = func(r *web.Response) {
+		r.SetResponseCode(http.StatusNotFound)
+		r.RenderTemplate("404")
+	}
 )
 
 func CmdWeb() error {
 	server := web.Server{
+		NotFoundHandler: notFoundHandler,
 		Port: port,
 		UseSessions: true,
 		TemplatesDir: "templates",
