@@ -7,7 +7,15 @@ import (
 )
 
 func GetTransactionsForUser(userId uint) ([]*db.InvestmentTransaction, error) {
-	return db.GetInvestmentTransactionsForUser(userId)
+	transactions, err := db.GetInvestmentTransactionsForUser(userId)
+	if err != nil {
+		return []*db.InvestmentTransaction{}, fmt.Errorf("Error getting investment transactions for user: %s", err)
+	}
+	for _, transaction := range transactions {
+		transaction.Investment.Id = transaction.InvestmentId
+		transaction.Investment.Load()
+	}
+	return transactions, nil
 }
 
 func AddTransaction(userId uint, investmentType string, symbol string, transactionType db.InvestmentTransactionType, date time.Time, price float32, quantity float32) error {

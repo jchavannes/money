@@ -50,7 +50,44 @@ $(function () {
                  * @param {string} data
                  */
                 success: function (data) {
-                    var html = MoneyApp.Templates.Snippets.Panel("Investment Transactions", data);
+                    var transactions;
+                    try {
+                        transactions = JSON.parse(data);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
+                    var html = "";
+                    for (var i = 0; i < transactions.length; i++) {
+                        var transaction = transactions[i];
+                        console.log(transaction);
+                        html +=
+                            "<tr>" +
+                            "<td>" + (transaction.Type === 1 ? "Buy" : "Sell") + "</td>" +
+                            "<td>" + transaction.Date.slice(0,10) + "</td>" +
+                            "<td>" + transaction.Investment.InvestmentType.toUpperCase() + "</td>" +
+                            "<td>" + transaction.Investment.Symbol + "</td>" +
+                            "<td>" + transaction.Price + "</td>" +
+                            "<td>" + transaction.Quantity + "</td>" +
+                            "</tr>";
+                    }
+                    html =
+                        "<table class='table table-bordered table-striped'>" +
+                        "<thead>" +
+                        "<tr>" +
+                        "<th>Action</th>" +
+                        "<th>Date</th>" +
+                        "<th>Type</th>" +
+                        "<th>Symbol</th>" +
+                        "<th>Price</th>" +
+                        "<th>Quantity</th>" +
+                        "</tr>" +
+                        "</thead>" +
+                        "<tbody>" +
+                        html +
+                        "</tbody>" +
+                        "</table>";
+                    html = MoneyApp.Templates.Snippets.Panel("Investment Transactions", html);
                     $investmentTransactions.html(html);
                 }
             })
