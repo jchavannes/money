@@ -13,6 +13,8 @@ var (
 	dbInterfaces = []interface{}{
 		User{},
 		Session{},
+		Investment{},
+		InvestmentTransaction{},
 	}
 )
 

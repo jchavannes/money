@@ -38,6 +38,25 @@ $(function() {
 
     MoneyApp.SetBaseUrl = SetBaseUrl;
 
+    MoneyApp.Section = {
+        /**
+         * @param {jQuery} $investmentTransactions
+         */
+        InvestmentTransactions: function ($investmentTransactions) {
+            $.ajax({
+                url: MoneyApp.URL.InvestmentTransactionsGet,
+                method: "post",
+                /**
+                 * @param {string} data
+                 */
+                success: function(data) {
+                    var html = MoneyApp.Templates.Snippets.Panel("Investment Transactions", data);
+                    $investmentTransactions.html(html);
+                }
+            })
+        }
+    };
+
     MoneyApp.Form = {
         /**
          * @param {jQuery} $ele
@@ -140,7 +159,8 @@ $(function() {
     MoneyApp.URL = {
         Dashboard: "dashboard",
         LoginSubmit: "login-submit",
-        SignupSubmit: "signup-submit"
+        SignupSubmit: "signup-submit",
+        InvestmentTransactionsGet: "investment-transactions-get"
     };
 
 });

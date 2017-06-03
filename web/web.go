@@ -14,6 +14,7 @@ const (
 	URL_LOGIN = "/login"
 	URL_LOGIN_SUBMIT = "/login-submit"
 	URL_LOGOUT = "/logout"
+	URL_INVESTMENT_TRANSACTIONS_GET = "/investment-transactions-get"
 )
 
 var (
@@ -65,6 +66,7 @@ func RunWeb() error {
 			loginRoute,
 			loginSubmitRoute,
 			logoutRoute,
+			investmentTransactionsGetRoute,
 		},
 	}
 	return server.Run()
