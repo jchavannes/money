@@ -6,15 +6,73 @@
         <h2>Dashboard</h2>
     </div>
 </div>
+
 <div class="container">
     <div class="row">
         <div id="investment-transactions" class="col-md-6"></div>
+        <div class="col-md-6">
+            <div class='panel panel-default'>
+                <div class='panel-heading'><h3 class='panel-title'>Add Investment Transaction</h3></div>
+                <div class='panel-body'>
+                    <form id="add-investment-transaction">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="input-investment-type">Investment Type:</label>
+                                <select id="input-investment-type" name="investment-type" class="form-control">
+                                    <option value="nasdaq">NASDAQ</option>
+                                    <option value="nyse">NYSE</option>
+                                    <option value="nysemkt">NYSEMKT</option>
+                                    <!--<option value="indexsp">Index</option>-->
+                                    <option value="crypto">Crypto</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="input-investment-symbol">Investment Symbol:</label>
+                                <input class="form-control autocomplete" id="input-investment-symbol" type="text"
+                                       name="investment-symbol"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="input-transaction-date">Transaction Date:</label>
+                                <input class="form-control" id="input-transaction-date" type="text"
+                                       name="transaction-date"/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="input-transaction-type">Transaction Type:</label>
+                                <select id="input-transaction-type" name="transaction-type" class="form-control">
+                                    <option value="buy">Buy</option>
+                                    <option value="sell">Sell</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="input-price">Unit Price (USD):</label>
+                                <input class="form-control" id="input-transaction-price" type="text" name="transaction-price"/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="input-quantity">Quantity:</label>
+                                <input class="form-control" id="input-transaction-quantity" type="text" name="transaction-quantity"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <p>
+                            <input type="submit" class="btn btn-primary" value="Add Investment Transaction"/>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    $(function() {
-        MoneyApp.Section.InvestmentTransactions($("#investment-transactions"))
+    $(function () {
+        MoneyApp.Section.InvestmentTransactions($("#investment-transactions"));
+        MoneyApp.Form.AddInvestmentTransaction($("#add-investment-transaction"));
     });
 </script>
 
