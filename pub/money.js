@@ -1,4 +1,4 @@
-MoneyApp = {};
+var MoneyApp = {};
 
 $(function() {
 

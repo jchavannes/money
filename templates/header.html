@@ -1,8 +1,9 @@
 <html>
 <head>
-    <title>Money</title>
+    <title>Money Tracker</title>
     <base href="{{ .BaseUrl }}" />
 
+    <link rel="shortcut icon" href="favicon.png" />
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="money.css"/>
 
@@ -25,8 +26,16 @@
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ .BaseUrl }}"><h1>Money</h1></a>
+            <a class="navbar-brand" href="{{ .BaseUrl }}">
+                <h1>
+                    <img src="logo.png" />&nbsp;
+                    <span style="color:green;">Money</span> Tracker
+                </h1>
+            </a>
         </div>
 
         <div id="navbar" class="navbar-collapse collapse">

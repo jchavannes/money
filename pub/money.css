@@ -6,7 +6,7 @@
     background: #eee;
 }
 .navbar-brand {
-    padding: 8px 15px;
+    padding: 5px 15px;
 }
 .navbar-brand h1 {
     display: inline-block;
@@ -15,7 +15,31 @@
     padding: 0;
     color: #333;
 }
+.navbar-brand h1 img {
+    width: 45px;
+    height: 45px;
+}
 
 .top-container {
-    margin-top: 50px;
+    margin-top: 75px;
+}
+
+.jumbotron {
+    background: none;
+    padding: 5px 0;
+    margin-bottom: 0;
+}
+.jumbotron h2 {
+    font-size: 36px;
+}
+
+footer p {
+    text-align: right;
+}
+
+.signup.container form,
+.login.container form {
+    padding-top: 70px;
+    max-width: 300px;
+    margin: 0 auto;
 }

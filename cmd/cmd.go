@@ -6,8 +6,8 @@ import (
 
 var (
 	moneyCmd = &cobra.Command{
-		Use:   "iiproject",
-		Short: "Run iiProject application",
+		Use:   "money",
+		Short: "Run money application",
 	}
 
 	webCmd = &cobra.Command{
