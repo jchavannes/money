@@ -60,7 +60,6 @@ $(function () {
                     var html = "";
                     for (var i = 0; i < transactions.length; i++) {
                         var transaction = transactions[i];
-                        console.log(transaction);
                         html +=
                             "<tr>" +
                             "<td>" + (transaction.Type === 1 ? "Buy" : "Sell") + "</td>" +
@@ -69,18 +68,22 @@ $(function () {
                             "<td>" + transaction.Investment.Symbol + "</td>" +
                             "<td>" + transaction.Price + "</td>" +
                             "<td>" + transaction.Quantity + "</td>" +
+                            "<td>" +
+                            "" +
+                            "</td>" +
                             "</tr>";
                     }
                     html =
                         "<table class='table table-bordered table-striped'>" +
                         "<thead>" +
                         "<tr>" +
-                        "<th>Action</th>" +
-                        "<th>Date</th>" +
                         "<th>Type</th>" +
-                        "<th>Symbol</th>" +
+                        "<th>Date</th>" +
+                        "<th>Market</th>" +
+                        "<th>Name</th>" +
                         "<th>Price</th>" +
                         "<th>Quantity</th>" +
+                        "<th>Actions</th>" +
                         "</tr>" +
                         "</thead>" +
                         "<tbody>" +
@@ -128,7 +131,6 @@ $(function () {
                             console.log(e);
                             return;
                         }
-                        console.log(tags);
                         if (tags && tags.length > 0) {
                             $investmentSymbolInput.autocomplete({
                                 source: tags
@@ -166,8 +168,8 @@ $(function () {
                             price: $transactionPriceInput.val(),
                             quantity: $transactionQuantityInput.val()
                         },
-                        success: function (data) {
-
+                        success: function () {
+                            Events.Publish(MoneyApp.Events.UpdateInvestmentTransactions, {});
                         }
                     });
                 });
@@ -271,6 +273,10 @@ $(function () {
         }
     };
 
+    MoneyApp.Events = {
+        UpdateInvestmentTransactions: "update-investment-transactions"
+    };
+
     MoneyApp.URL = {
         Dashboard: "dashboard",
         LoginSubmit: "login-submit",
@@ -281,3 +287,4 @@ $(function () {
     };
 
 });
+

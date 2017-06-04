@@ -50,11 +50,11 @@
                         <br/>
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="input-price">Unit Price (USD):</label>
+                                <label for="input-transaction-price">Unit Price (USD):</label>
                                 <input class="form-control" id="input-transaction-price" type="text" name="transaction-price"/>
                             </div>
                             <div class="col-md-6">
-                                <label for="input-quantity">Quantity:</label>
+                                <label for="input-transaction-quantity">Quantity:</label>
                                 <input class="form-control" id="input-transaction-quantity" type="text" name="transaction-quantity"/>
                             </div>
                         </div>
@@ -71,7 +71,10 @@
 
 <script type="text/javascript">
     $(function () {
-        MoneyApp.Section.InvestmentTransactions($("#investment-transactions"));
+        Events.Subscribe(MoneyApp.Events.UpdateInvestmentTransactions, function() {
+            MoneyApp.Section.InvestmentTransactions($("#investment-transactions"));
+        });
+        Events.Publish(MoneyApp.Events.UpdateInvestmentTransactions, {});
         MoneyApp.Form.AddInvestmentTransaction($("#add-investment-transaction"));
     });
 </script>
