@@ -73,6 +73,9 @@ $(function () {
         DeleteInvestmentTransaction: function ($form, transactionId) {
             $form.submit(function (e) {
                 e.preventDefault();
+                if (! confirm("Are you sure you want to delete this investment transaction?")) {
+                    return;
+                }
                 $.ajax({
                     method: "post",
                     url: MoneyApp.URL.InvestmentTransactionDelete,
