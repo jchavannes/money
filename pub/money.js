@@ -40,6 +40,30 @@ $(function () {
 
     MoneyApp.Section = {
         /**
+         * @param {jQuery} $portfolio
+         */
+        Portfolio: function ($portfolio) {
+            $.ajax({
+                url: MoneyApp.URL.PortfolioGet,
+                method: "post",
+                /**
+                 * @param {string} data
+                 */
+                success: function (data) {
+                    /** @type {Portfolio} portfolio */
+                    var portfolio;
+                    try {
+                        portfolio = JSON.parse(data);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
+
+                    MoneyApp.Templates.Portfolio($portfolio, portfolio);
+                }
+            })
+        },
+        /**
          * @param {jQuery} $investmentTransactions
          */
         InvestmentTransactions: function ($investmentTransactions) {
@@ -73,7 +97,7 @@ $(function () {
         DeleteInvestmentTransaction: function ($form, transactionId) {
             $form.submit(function (e) {
                 e.preventDefault();
-                if (! confirm("Are you sure you want to delete this investment transaction?")) {
+                if (!confirm("Are you sure you want to delete this investment transaction?")) {
                     return;
                 }
                 $.ajax({
@@ -100,9 +124,10 @@ $(function () {
             var $transactionQuantityInput = $form.find("input[name=transaction-quantity]");
 
             $transactionDateInput.datepicker();
-            $investmentTypeInput.change(setInventorySymbol);
-
             setInventorySymbol();
+            $investmentTypeInput.change(function () {
+                setInventorySymbol();
+            });
 
             $form.submit(function (e) {
                 e.preventDefault();
@@ -245,6 +270,52 @@ $(function () {
 
     MoneyApp.Templates = {
         /**
+         * @param {jQuery} $portfolio
+         * @param {Portfolio} portfolio
+         */
+        Portfolio: function ($portfolio, portfolio) {
+            var item;
+            var i;
+            var html = "";
+            for (i = 0; i < portfolio.Items.length; i++) {
+                /** @type {PortfolioItem} item */
+                item = portfolio.Items[i];
+                html +=
+                    "<tr>" +
+                    "<td>" + item.Investment.Symbol + "</td>" +
+                    "<td>" + item.Quantity + "</td>" +
+                    "<td>" + item.Price + "</td>" +
+                    "<td>" + item.Value + "</td>" +
+                    "<td>" + item.Cost + "</td>" +
+                    "<td>" + item.NetGainLoss + "</td>" +
+                    "<td>" + item.NetGainLossPercent + "</td>" +
+                    "<td>" + item.DistributionPercent + "</td>" +
+                    "<td>" + item.NetGainLossWeighted + "</td>" +
+                    "</tr>";
+            }
+            html =
+                "<table class='table table-bordered table-striped'>" +
+                "<thead>" +
+                "<tr>" +
+                "<th>Name</th>" +
+                "<th>Qty</th>" +
+                "<th>Price</th>" +
+                "<th>Value</th>" +
+                "<th>Paid</th>" +
+                "<th>Net</th>" +
+                "<th>Change</th>" +
+                "<th>Dist.</th>" +
+                "<th>Weighted</th>" +
+                "</tr>" +
+                "</thead>" +
+                "<tbody>" +
+                html +
+                "</tbody>" +
+                "</table>";
+            html = MoneyApp.Templates.Snippets.Panel("Portfolio", html);
+            $portfolio.html(html);
+        },
+        /**
          * @param {jQuery} $investmentTransactions
          * @param {[Transaction]} transactions
          */
@@ -320,6 +391,7 @@ $(function () {
         Dashboard: "dashboard",
         LoginSubmit: "login-submit",
         SignupSubmit: "signup-submit",
+        PortfolioGet: "portfolio-get",
         InvestmentTransactionsGet: "investment-transactions-get",
         InvestmentTransactionAdd: "investment-transaction-add",
         InvestmentTransactionDelete: "investment-transaction-delete",
@@ -344,4 +416,29 @@ $(function () {
  *   InvestmentType: string
  *   Symbol: string
  * }} Investment
+ */
+
+/**
+ * @typedef {{
+ *   Items: []PortfolioItem
+ *   TotalValue: float
+ *   TotalCost: float
+ *   NetGainLoss: float
+ *   NetGainLossPercent: float
+ * }} Portfolio
+ */
+
+/**
+ * @typedef {{
+ *   Investment: Investment
+ *   Url: string
+ *   Quantity: float
+ *   Price: float
+ *   Value: float
+ *   Cost: float
+ *   NetGainLoss: float
+ *   NetGainLossPercent: float
+ *   DistributionPercent: float
+ *   NetGainLossWeighted: float
+ * }} PortfolioItem
  */

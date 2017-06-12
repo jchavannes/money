@@ -9,7 +9,15 @@
 
 <div class="container">
     <div class="row">
+        <div id="portfolio" class="col-md-12"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
         <div id="investment-transactions" class="col-md-12"></div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <div class='panel panel-default'>
                 <div class='panel-heading'><h3 class='panel-title'>Add Investment Transaction</h3></div>
@@ -71,6 +79,7 @@
 
 <script type="text/javascript">
     $(function () {
+        MoneyApp.Section.Portfolio($("#portfolio"));
         Events.Subscribe(MoneyApp.Events.UpdateInvestmentTransactions, function() {
             MoneyApp.Section.InvestmentTransactions($("#investment-transactions"));
         });
