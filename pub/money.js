@@ -104,6 +104,25 @@ $(function () {
 
             setInventorySymbol();
 
+            $form.submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: MoneyApp.URL.InvestmentTransactionAdd,
+                    method: "post",
+                    data: {
+                        type: $investmentTypeInput.val(),
+                        symbol: $investmentSymbolInput.val(),
+                        "transaction-type": $transactionTypeInput.val(),
+                        date: $transactionDateInput.val(),
+                        price: $transactionPriceInput.val(),
+                        quantity: $transactionQuantityInput.val()
+                    },
+                    success: function () {
+                        Events.Publish(MoneyApp.Events.UpdateInvestmentTransactions, {});
+                    }
+                });
+            });
+
             function setInventorySymbol() {
                 var investmentType = $investmentTypeInput.val();
                 $.ajax({
@@ -144,25 +163,6 @@ $(function () {
                         break;
                 }
                 $investmentSymbolInput.attr("placeholder", placeholder);
-
-                $form.submit(function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: MoneyApp.URL.InvestmentTransactionAdd,
-                        method: "post",
-                        data: {
-                            type: $investmentTypeInput.val(),
-                            symbol: $investmentSymbolInput.val(),
-                            "transaction-type": $transactionTypeInput.val(),
-                            date: $transactionDateInput.val(),
-                            price: $transactionPriceInput.val(),
-                            quantity: $transactionQuantityInput.val()
-                        },
-                        success: function () {
-                            Events.Publish(MoneyApp.Events.UpdateInvestmentTransactions, {});
-                        }
-                    });
-                });
             }
         },
         /**
