@@ -50,54 +50,41 @@ $(function () {
                  * @param {string} data
                  */
                 success: function (data) {
+                    /** @type {[Transaction]} transactions */
                     var transactions;
+
                     try {
                         transactions = JSON.parse(data);
                     } catch (e) {
                         console.log(e);
                         return;
                     }
-                    var html = "";
-                    for (var i = 0; i < transactions.length; i++) {
-                        var transaction = transactions[i];
-                        html +=
-                            "<tr>" +
-                            "<td>" + (transaction.Type === 1 ? "Buy" : "Sell") + "</td>" +
-                            "<td>" + transaction.Date.slice(0,10) + "</td>" +
-                            "<td>" + transaction.Investment.InvestmentType.toUpperCase() + "</td>" +
-                            "<td>" + transaction.Investment.Symbol + "</td>" +
-                            "<td>" + transaction.Price + "</td>" +
-                            "<td>" + transaction.Quantity + "</td>" +
-                            "<td>" +
-                            "" +
-                            "</td>" +
-                            "</tr>";
-                    }
-                    html =
-                        "<table class='table table-bordered table-striped'>" +
-                        "<thead>" +
-                        "<tr>" +
-                        "<th>Type</th>" +
-                        "<th>Date</th>" +
-                        "<th>Market</th>" +
-                        "<th>Name</th>" +
-                        "<th>Price</th>" +
-                        "<th>Quantity</th>" +
-                        "<th>Actions</th>" +
-                        "</tr>" +
-                        "</thead>" +
-                        "<tbody>" +
-                        html +
-                        "</tbody>" +
-                        "</table>";
-                    html = MoneyApp.Templates.Snippets.Panel("Investment Transactions", html);
-                    $investmentTransactions.html(html);
+                    MoneyApp.Templates.InvestmentTransactions($investmentTransactions, transactions);
                 }
             })
         }
     };
 
     MoneyApp.Form = {
+        /**
+         * @param {jQuery} $form
+         * @param {int} transactionId
+         */
+        DeleteInvestmentTransaction: function ($form, transactionId) {
+            $form.submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    method: "post",
+                    url: MoneyApp.URL.InvestmentTransactionDelete,
+                    data: {
+                        transactionId: transactionId
+                    },
+                    success: function () {
+                        Events.Publish(MoneyApp.Events.UpdateInvestmentTransactions, {});
+                    }
+                });
+            })
+        },
         /**
          * @param {jQuery} $form
          */
@@ -254,6 +241,55 @@ $(function () {
     };
 
     MoneyApp.Templates = {
+        /**
+         * @param {jQuery} $investmentTransactions
+         * @param {[Transaction]} transactions
+         */
+        InvestmentTransactions: function ($investmentTransactions, transactions) {
+            var transaction;
+            var i;
+            var html = "";
+            for (i = 0; i < transactions.length; i++) {
+                transaction = transactions[i];
+                html +=
+                    "<tr>" +
+                    "<td>" + (transaction.Type === 1 ? "Buy" : "Sell") + "</td>" +
+                    "<td>" + transaction.Date.slice(0, 10) + "</td>" +
+                    "<td>" + transaction.Investment.InvestmentType.toUpperCase() + "</td>" +
+                    "<td>" + transaction.Investment.Symbol + "</td>" +
+                    "<td>" + transaction.Price + "</td>" +
+                    "<td>" + transaction.Quantity + "</td>" +
+                    "<td>" +
+                    "<form id='delete-transaction-" + transaction.Id + "'>" +
+                    "<input type='submit' class='btn btn-xs btn-danger' value='Remove'/>" +
+                    "</form>" +
+                    "</td>" +
+                    "</tr>";
+            }
+            html =
+                "<table class='table table-bordered table-striped'>" +
+                "<thead>" +
+                "<tr>" +
+                "<th>Type</th>" +
+                "<th>Date</th>" +
+                "<th>Market</th>" +
+                "<th>Name</th>" +
+                "<th>Price</th>" +
+                "<th>Quantity</th>" +
+                "<th>Actions</th>" +
+                "</tr>" +
+                "</thead>" +
+                "<tbody>" +
+                html +
+                "</tbody>" +
+                "</table>";
+            html = MoneyApp.Templates.Snippets.Panel("Investment Transactions", html);
+            $investmentTransactions.html(html);
+            for (i = 0; i < transactions.length; i++) {
+                transaction = transactions[i];
+                MoneyApp.Form.DeleteInvestmentTransaction($("#delete-transaction-" + transaction.Id), transaction.Id);
+            }
+        },
         Snippets: {
             /**
              * @param {string} title
@@ -283,8 +319,26 @@ $(function () {
         SignupSubmit: "signup-submit",
         InvestmentTransactionsGet: "investment-transactions-get",
         InvestmentTransactionAdd: "investment-transaction-add",
+        InvestmentTransactionDelete: "investment-transaction-delete",
         InvestmentSymbolsGet: "investment-symbols-get"
     };
 
 });
 
+/**
+ * @typedef {{
+ *   Id: int
+ *   Type: string
+ *   Date: string
+ *   Investment: Investment
+ *   Quantity: float
+ *   Price: float
+ * }} Transaction
+ */
+
+/**
+ * @typedef {{
+ *   InvestmentType: string
+ *   Symbol: string
+ * }} Investment
+ */

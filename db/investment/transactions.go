@@ -4,6 +4,7 @@ import (
 	"git.jasonc.me/main/money/db"
 	"time"
 	"fmt"
+	"errors"
 )
 
 func GetTransactionsForUser(userId uint) ([]*db.InvestmentTransaction, error) {
@@ -41,5 +42,23 @@ func AddTransaction(userId uint, investmentType string, symbol string, transacti
 		return fmt.Errorf("Error saving investment transaction: %s", err)
 	}
 	fmt.Printf("Saved transaction: %#v\n", investmentTransaction)
+	return nil
+}
+
+func DeleteTransaction(userId uint, investmentId uint) error {
+	investmentTransaction := db.InvestmentTransaction{
+		Id: investmentId,
+	}
+	err := investmentTransaction.Load()
+	if err != nil {
+		return fmt.Errorf("Error loading transaction: %s", err)
+	}
+	if investmentTransaction.UserId != userId {
+		return errors.New("UserId does not match")
+	}
+	err = investmentTransaction.Delete()
+	if err != nil {
+		return fmt.Errorf("Error deleting transaction: %s", err)
+	}
 	return nil
 }

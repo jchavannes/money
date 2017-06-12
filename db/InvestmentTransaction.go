@@ -37,6 +37,22 @@ func (i *InvestmentTransaction) Save() error {
 	return nil
 }
 
+func (i *InvestmentTransaction) Load() error {
+	result := find(i, i)
+	if result.Error != nil {
+		return fmt.Errorf("Error finding investment transaction: %s", result.Error)
+	}
+	return nil
+}
+
+func (i *InvestmentTransaction) Delete() error {
+	result := remove(i)
+	if result.Error != nil {
+		return fmt.Errorf("Error removing investment transaction: %s", result.Error)
+	}
+	return nil
+}
+
 func GetInvestmentTransactionsForUser(userId uint) ([]*InvestmentTransaction, error) {
 	var investmentTransactions []*InvestmentTransaction
 	result := find(&investmentTransactions, &InvestmentTransaction{

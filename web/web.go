@@ -16,6 +16,7 @@ const (
 	URL_LOGOUT = "/logout"
 	URL_INVESTMENT_TRANSACTIONS_GET = "/investment-transactions-get"
 	URL_INVESTMENT_TRANSACTION_ADD = "/investment-transaction-add"
+	URL_INVESTMENT_TRANSACTION_DELETE = "/investment-transaction-delete"
 	URL_INVESTMENT_SYMBOLS_GET = "/investment-symbols-get"
 )
 
@@ -71,6 +72,7 @@ func RunWeb() error {
 			investmentTransactionsGetRoute,
 			investmentSymbolsGetRoute,
 			investmentTransactionAddRoute,
+			investmentTransactionDeleteRoute,
 		},
 	}
 	return server.Run()

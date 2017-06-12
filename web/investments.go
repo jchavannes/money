@@ -14,6 +14,7 @@ import (
 const (
 	FORM_INPUT_INVESTMENT_TYPE = "type"
 	FORM_INPUT_INVESTMENT_SYMBOL = "symbol"
+	FORM_INPUT_TRANSACTION_ID = "transactionId"
 	FORM_INPUT_TRANSACTION_DATE = "date"
 	FORM_INPUT_TRANSACTION_PRICE = "price"
 	FORM_INPUT_TRANSACTION_QUANTITY = "quantity"
@@ -25,7 +26,7 @@ var investmentTransactionsGetRoute = web.Route{
 	CsrfProtect: true,
 	Handler: func(r *web.Response) {
 		if ! auth.IsLoggedIn(r.Session.CookieId) {
-			r.SetRedirect(getUrlWithBaseUrl(URL_INDEX, r))
+			r.SetResponseCode(http.StatusUnauthorized)
 			return
 		}
 		user, err := auth.GetSessionUser(r.Session.CookieId)
@@ -47,7 +48,7 @@ var investmentSymbolsGetRoute = web.Route{
 	CsrfProtect: true,
 	Handler: func(r *web.Response) {
 		if ! auth.IsLoggedIn(r.Session.CookieId) {
-			r.SetRedirect(getUrlWithBaseUrl(URL_INDEX, r))
+			r.SetResponseCode(http.StatusUnauthorized)
 			return
 		}
 		investmentType := r.Request.GetFormValue(FORM_INPUT_INVESTMENT_TYPE)
@@ -72,7 +73,7 @@ var investmentTransactionAddRoute = web.Route{
 	CsrfProtect: true,
 	Handler: func(r *web.Response) {
 		if ! auth.IsLoggedIn(r.Session.CookieId) {
-			r.SetRedirect(getUrlWithBaseUrl(URL_INDEX, r))
+			r.SetResponseCode(http.StatusUnauthorized)
 			return
 		}
 		user, err := auth.GetSessionUser(r.Session.CookieId)
@@ -119,6 +120,38 @@ var investmentTransactionAddRoute = web.Route{
 			float32(transactionQuantity),
 		)
 
+		if err != nil {
+			r.Error(err, http.StatusUnprocessableEntity)
+			return
+		}
+	},
+}
+
+var investmentTransactionDeleteRoute = web.Route{
+	Pattern: URL_INVESTMENT_TRANSACTION_DELETE,
+	CsrfProtect: true,
+	Handler: func(r *web.Response) {
+		if ! auth.IsLoggedIn(r.Session.CookieId) {
+			r.SetResponseCode(http.StatusUnauthorized)
+			return
+		}
+		user, err := auth.GetSessionUser(r.Session.CookieId)
+		if err != nil {
+			r.Error(err, http.StatusInternalServerError)
+			return
+		}
+
+		transactionIdString := r.Request.GetFormValue(FORM_INPUT_TRANSACTION_ID)
+		transactionId, err := strconv.Atoi(transactionIdString)
+		if err != nil {
+			r.Error(err, http.StatusUnprocessableEntity)
+			return
+		}
+
+		err = investment.DeleteTransaction(
+			user.Id,
+			uint(transactionId),
+		)
 		if err != nil {
 			r.Error(err, http.StatusUnprocessableEntity)
 			return
