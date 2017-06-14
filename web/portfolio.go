@@ -3,8 +3,8 @@ package web
 import (
 	"github.com/jchavannes/jgo/web"
 	"git.jasonc.me/main/money/db/auth"
-	"net/http"
 	"git.jasonc.me/main/money/db/portfolio"
+	"net/http"
 )
 
 var portfolioGetRoute = web.Route{
