@@ -45,9 +45,9 @@ func AddTransaction(userId uint, investmentType string, symbol string, transacti
 	return nil
 }
 
-func DeleteTransaction(userId uint, investmentId uint) error {
+func DeleteTransaction(userId uint, investmentTransactionId uint) error {
 	investmentTransaction := db.InvestmentTransaction{
-		Id: investmentId,
+		Id: investmentTransactionId,
 	}
 	err := investmentTransaction.Load()
 	if err != nil {

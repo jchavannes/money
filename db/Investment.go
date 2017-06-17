@@ -1,6 +1,9 @@
 package db
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type InvestmentType string
 
@@ -35,7 +38,7 @@ func (i *Investment) Load() error {
 
 func (s *Investment) GetUrl() string {
 	var url = "https://www.google.com/finance/getprices?&i=86400&p=10Y&f=d,c,v,k,o,h,l&df=cpct"
-	return url + "&q=" + s.Symbol + "&x=" + s.InvestmentType
+	return url + "&q=" + s.Symbol + "&x=" + strings.ToUpper(s.InvestmentType)
 }
 
 func GetInvestmentsForType(investmentType string) ([]*Investment, error) {

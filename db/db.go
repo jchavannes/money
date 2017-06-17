@@ -14,9 +14,14 @@ var (
 		User{},
 		Session{},
 		Investment{},
+		InvestmentPrice{},
 		InvestmentTransaction{},
 	}
 )
+
+func isRecordNotFoundError(e error) bool {
+	return e.Error() == "record not found"
+}
 
 func getDb() (*gorm.DB, error) {
 	if _db == nil {
