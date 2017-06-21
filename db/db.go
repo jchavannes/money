@@ -1,7 +1,6 @@
 package db
 
 import (
-	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -27,8 +26,9 @@ func getDb() (*gorm.DB, error) {
 	if _db == nil {
 		var err error
 		_db, err = gorm.Open("sqlite3", "money.db")
+		_db.LogMode(false)
 		if err != nil {
-			return _db, errors.New("Failed to connect to database\n")
+			return _db, fmt.Errorf("Failed to connect to database: %s", err)
 		}
 		for _, iface := range dbInterfaces {
 			result := _db.AutoMigrate(iface)
@@ -43,67 +43,29 @@ func getDb() (*gorm.DB, error) {
 func create(value interface{}) *gorm.DB {
 	db, _ := getDb()
 	result := db.Create(value)
-	if result.Error != nil {
-		fmt.Printf("Db error: %s\n", result.Error)
-		return result
-	}
 	return result
 }
 
 func find(out interface{}, where ...interface{}) *gorm.DB {
 	db, _ := getDb()
 	result := db.Find(out, where...)
-	if result.Error != nil && !result.RecordNotFound() {
-		fmt.Printf("Db error: %s\n", result.Error)
-		return result
-	}
-	return result
-}
-
-func findOrderBy(out interface{}, orderBy string, where ...interface{}) *gorm.DB {
-	db, _ := getDb()
-	result := db.Order(orderBy).Find(out, where...)
-	if result.Error != nil && !result.RecordNotFound() {
-		fmt.Printf("Db error: %s\n", result.Error)
-		return result
-	}
-	return result
-}
-
-func findString(out interface{}, where string, args ...interface{}) *gorm.DB {
-	db, _ := getDb()
-	result := db.Where(where, args...).Find(out)
-	if result.Error != nil && !result.RecordNotFound() {
-		fmt.Printf("Db error: %s\n", result.Error)
-		return result
-	}
 	return result
 }
 
 func save(value interface{}) *gorm.DB {
 	db, _ := getDb()
 	if db.Error != nil {
-		fmt.Printf("Db error: %s\n", db.Error)
 		return db
 	}
 	result := db.Save(value)
-	if result.Error != nil {
-		fmt.Printf("Db error: %s\n", result.Error)
-		return result
-	}
 	return result
 }
 
 func remove(value interface{}) *gorm.DB {
 	db, _ := getDb()
 	if db.Error != nil {
-		fmt.Printf("Db error: %s\n", db.Error)
 		return db
 	}
 	result := db.Delete(value)
-	if result.Error != nil {
-		fmt.Printf("Db error: %s\n", result.Error)
-		return result
-	}
 	return result
 }

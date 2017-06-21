@@ -4,31 +4,29 @@ import (
 	"bufio"
 	"fmt"
 	"git.jasonc.me/main/money/db"
-	"log"
 	"net/http"
 	"regexp"
 	"strconv"
-	"errors"
+	"github.com/jchavannes/jgo/jerr"
 )
 
-func UpdateStockInvestment(investment *db.Investment) error {
-	lastItem, err := db.GetLastInvestmentPrice(investment)
+func UpdateStockInvestmentFromGoogleFinance(investment *db.Investment) error {
 	var lastItemTimestamp int64
 
+	lastItem, err := db.GetLastInvestmentPrice(investment)
 	if err != nil {
 		lastItemTimestamp = 0
-		return err
 	} else {
 		lastItemTimestamp = lastItem.Timestamp
 	}
 
-	url := investment.GetUrl()
+	url := investment.GetGoogleFinanceUrl()
 
 	fmt.Printf("Fetching data from: %s\n", url)
 	resp, err := http.Get(url)
 
 	if err != nil {
-		return fmt.Errorf("Error getting stock data: %s", err)
+		return jerr.Get("Error getting stock data", err)
 	}
 
 	scanner := bufio.NewScanner(resp.Body)
@@ -58,7 +56,7 @@ func UpdateStockInvestment(investment *db.Investment) error {
 		matches := getDayPrice.FindStringSubmatch(line)
 
 		if matches == nil {
-			return errors.New("Error parsing data")
+			return jerr.New("Error parsing data")
 		}
 
 		timestamp, _ := strconv.ParseInt(matches[1], 10, 64)
@@ -86,7 +84,7 @@ func UpdateStockInvestment(investment *db.Investment) error {
 
 		err = investmentPrice.AddOrUpdate()
 		if err != nil {
-			return fmt.Errorf("Error updating investment price: %s", err)
+			return jerr.Get(fmt.Sprintf("Error updating investment price: %#v", investmentPrice), err)
 		}
 
 		totalRowsAdded++
@@ -95,9 +93,9 @@ func UpdateStockInvestment(investment *db.Investment) error {
 	err = scanner.Err()
 
 	if err != nil {
-		log.Fatal(err)
+		return jerr.Get("Error with scanner", err)
 	}
 
-	fmt.Printf("Rows added: %d\n", totalRowsAdded)
+	fmt.Printf("Rows added/updated: %d\n", totalRowsAdded)
 	return nil
 }

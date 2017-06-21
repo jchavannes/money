@@ -3,12 +3,13 @@ package db
 import (
 	"time"
 	"fmt"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 type InvestmentPrice struct {
 	Id           uint `gorm:"primary_key"`
 	Investment   Investment
-	InvestmentId uint
+	InvestmentId uint `gorm:"unique_index:stock_id_timestamp"`
 	Timestamp    int64 `gorm:"unique_index:stock_id_timestamp"`
 	Price        float32
 	CreatedAt    time.Time
@@ -31,11 +32,11 @@ func (i *InvestmentPrice) AddOrUpdate() error {
 	if result.Error == nil {
 		i.Id = findPrice.Id
 	} else if ! isRecordNotFoundError(result.Error) {
-		return fmt.Errorf("Error looking for existing record: %s", result.Error)
+		return jerr.Get("Error looking for existing record", result.Error)
 	}
 	result = save(i)
 	if result.Error != nil {
-		return fmt.Errorf("Error saving investment price: %s", result.Error)
+		return jerr.Get("Error saving investment price", result.Error)
 	}
 	return nil
 }
@@ -43,12 +44,12 @@ func (i *InvestmentPrice) AddOrUpdate() error {
 func GetLastInvestmentPrice(investment *Investment) (*InvestmentPrice, error) {
 	db, err := getDb()
 	if err != nil {
-		return nil, fmt.Errorf("Error getting db: %s", err)
+		return nil, jerr.Get("Error getting db", err)
 	}
-	var lastItem InvestmentPrice
-	result := db.Last(&lastItem, InvestmentPrice{InvestmentId: investment.Id})
+	var lastInvestmentPrice InvestmentPrice
+	result := db.Last(&lastInvestmentPrice, InvestmentPrice{InvestmentId: investment.Id})
 	if result.Error != nil {
-		return nil, fmt.Errorf("Error getting last item price: %s", result.Error)
+		return nil, jerr.Get("Error getting last investment price", result.Error)
 	}
-	return &lastItem, nil
+	return &lastInvestmentPrice, nil
 }

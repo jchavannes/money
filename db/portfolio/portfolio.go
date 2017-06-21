@@ -1,7 +1,7 @@
 package portfolio
 
 type Portfolio struct {
-	Items              []PortfolioItem
+	Items              []*PortfolioItem
 	TotalValue         float32
 	TotalCost          float32
 	NetGainLoss        float32

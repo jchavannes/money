@@ -36,7 +36,7 @@ func (i *Investment) Load() error {
 	return nil
 }
 
-func (s *Investment) GetUrl() string {
+func (s *Investment) GetGoogleFinanceUrl() string {
 	var url = "https://www.google.com/finance/getprices?&i=86400&p=10Y&f=d,c,v,k,o,h,l&df=cpct"
 	return url + "&q=" + s.Symbol + "&x=" + strings.ToUpper(s.InvestmentType)
 }
