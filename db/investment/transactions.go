@@ -4,13 +4,13 @@ import (
 	"git.jasonc.me/main/money/db"
 	"time"
 	"fmt"
-	"errors"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 func GetTransactionsForUser(userId uint) ([]*db.InvestmentTransaction, error) {
 	transactions, err := db.GetInvestmentTransactionsForUser(userId)
 	if err != nil {
-		return []*db.InvestmentTransaction{}, fmt.Errorf("Error getting investment transactions for user: %s", err)
+		return []*db.InvestmentTransaction{}, jerr.Get("Error getting investment transactions for user", err)
 	}
 	for _, transaction := range transactions {
 		transaction.Investment.Id = transaction.InvestmentId
@@ -26,7 +26,7 @@ func AddTransaction(userId uint, investmentType string, symbol string, transacti
 	}
 	err := investment.Load()
 	if err != nil {
-		return fmt.Errorf("Error loading investment: %s", err)
+		return jerr.Get("Error loading investment", err)
 	}
 	investmentTransaction := db.InvestmentTransaction{
 		UserId: userId,
@@ -39,7 +39,7 @@ func AddTransaction(userId uint, investmentType string, symbol string, transacti
 	}
 	err = investmentTransaction.Save()
 	if err != nil {
-		return fmt.Errorf("Error saving investment transaction: %s", err)
+		return jerr.Get("Error saving investment transaction", err)
 	}
 	fmt.Printf("Saved transaction: %#v\n", investmentTransaction)
 	return nil
@@ -51,14 +51,14 @@ func DeleteTransaction(userId uint, investmentTransactionId uint) error {
 	}
 	err := investmentTransaction.Load()
 	if err != nil {
-		return fmt.Errorf("Error loading transaction: %s", err)
+		return jerr.Get("Error loading transaction", err)
 	}
 	if investmentTransaction.UserId != userId {
-		return errors.New("UserId does not match")
+		return jerr.New("UserId does not match")
 	}
 	err = investmentTransaction.Delete()
 	if err != nil {
-		return fmt.Errorf("Error deleting transaction: %s", err)
+		return jerr.Get("Error deleting transaction", err)
 	}
 	return nil
 }

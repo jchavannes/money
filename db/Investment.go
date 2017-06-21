@@ -1,8 +1,8 @@
 package db
 
 import (
-	"fmt"
 	"strings"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 type InvestmentType string
@@ -30,7 +30,7 @@ func (i *Investment) Load() error {
 	if result.Error != nil {
 		result = save(i)
 		if result.Error != nil {
-			return fmt.Errorf("Error saving investment: %s", result.Error)
+			return jerr.Get("Error saving investment", result.Error)
 		}
 	}
 	return nil

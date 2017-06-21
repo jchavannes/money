@@ -1,10 +1,9 @@
 package auth
 
 import (
-	"errors"
-	"fmt"
 	"git.jasonc.me/main/money/db"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 func Login(cookieId string, username string, password string) error {
@@ -20,13 +19,13 @@ func Login(cookieId string, username string, password string) error {
 
 	session, err := db.GetSession(cookieId)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error getting session: %s\n", err))
+		return jerr.Get("Error getting session", err)
 	}
 
 	session.UserId = user.Id
 	err = session.Save()
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error saving session: %s\n", err))
+		return jerr.Get("Error saving session", err)
 	}
 
 	return nil

@@ -2,7 +2,7 @@ package db
 
 import (
 	"time"
-	"fmt"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 type InvestmentTransactionType uint
@@ -32,7 +32,7 @@ type InvestmentTransaction struct {
 func (i *InvestmentTransaction) Save() error {
 	result := save(i)
 	if result.Error != nil {
-		return fmt.Errorf("Error saving investment transaction: %s", result.Error)
+		return jerr.Get("Error saving investment transaction", result.Error)
 	}
 	return nil
 }
@@ -40,7 +40,7 @@ func (i *InvestmentTransaction) Save() error {
 func (i *InvestmentTransaction) Load() error {
 	result := find(i, i)
 	if result.Error != nil {
-		return fmt.Errorf("Error finding investment transaction: %s", result.Error)
+		return jerr.Get("Error finding investment transaction", result.Error)
 	}
 	return nil
 }
@@ -48,7 +48,7 @@ func (i *InvestmentTransaction) Load() error {
 func (i *InvestmentTransaction) Delete() error {
 	result := remove(i)
 	if result.Error != nil {
-		return fmt.Errorf("Error removing investment transaction: %s", result.Error)
+		return jerr.Get("Error removing investment transaction", result.Error)
 	}
 	return nil
 }

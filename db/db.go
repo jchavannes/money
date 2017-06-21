@@ -1,9 +1,9 @@
 package db
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 var _db *gorm.DB
@@ -28,7 +28,7 @@ func getDb() (*gorm.DB, error) {
 		_db, err = gorm.Open("sqlite3", "money.db")
 		_db.LogMode(false)
 		if err != nil {
-			return _db, fmt.Errorf("Failed to connect to database: %s", err)
+			return _db, jerr.Get("Failed to connect to database", err)
 		}
 		for _, iface := range dbInterfaces {
 			result := _db.AutoMigrate(iface)

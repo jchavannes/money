@@ -1,21 +1,20 @@
 package auth
 
 import (
-	"errors"
-	"fmt"
 	"git.jasonc.me/main/money/db"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 func Logout(cookieId string) error {
 	session, err := db.GetSession(cookieId)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error getting session: %s\n", err))
+		return jerr.Get("Error getting session", err)
 	}
 
 	session.HasLoggedOut = true
 	err = session.Save()
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error saving session: %s\n", err))
+		return jerr.Get("Error saving session", err)
 	}
 
 	return nil

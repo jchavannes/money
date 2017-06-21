@@ -8,7 +8,7 @@ import (
 	"git.jasonc.me/main/money/db"
 	"time"
 	"strconv"
-	"fmt"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 const (
@@ -91,14 +91,14 @@ var investmentTransactionAddRoute = web.Route{
 		transactionPriceString := r.Request.GetFormValue(FORM_INPUT_TRANSACTION_PRICE)
 		transactionPrice, err := strconv.ParseFloat(transactionPriceString, 32)
 		if err != nil {
-			r.Error(fmt.Errorf("Error converting price string: %s", err), http.StatusUnprocessableEntity)
+			r.Error(jerr.Get("Error converting price string", err), http.StatusUnprocessableEntity)
 			return
 		}
 
 		transactionQuantityString := r.Request.GetFormValue(FORM_INPUT_TRANSACTION_QUANTITY)
 		transactionQuantity, err := strconv.ParseFloat(transactionQuantityString, 32)
 		if err != nil {
-			r.Error(fmt.Errorf("Error converting quantity string: %s", err), http.StatusUnprocessableEntity)
+			r.Error(jerr.Get("Error converting quantity string", err), http.StatusUnprocessableEntity)
 			return
 		}
 
