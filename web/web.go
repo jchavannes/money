@@ -15,6 +15,7 @@ const (
 	URL_LOGIN_SUBMIT = "/login-submit"
 	URL_LOGOUT = "/logout"
 	URL_PORTFOLIO_GET = "/portfolio-get"
+	URL_INVESTMENT_UPDATE = "/investment-update"
 	URL_INVESTMENT_TRANSACTIONS_GET = "/investment-transactions-get"
 	URL_INVESTMENT_TRANSACTION_ADD = "/investment-transaction-add"
 	URL_INVESTMENT_TRANSACTION_DELETE = "/investment-transaction-delete"
@@ -71,6 +72,7 @@ func RunWeb() error {
 			loginSubmitRoute,
 			logoutRoute,
 			portfolioGetRoute,
+			investmentUpdateRoute,
 			investmentTransactionsGetRoute,
 			investmentSymbolsGetRoute,
 			investmentTransactionAddRoute,

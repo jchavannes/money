@@ -79,8 +79,11 @@
 
 <script type="text/javascript">
     $(function () {
-        Events.Subscribe(MoneyApp.Events.UpdateInvestmentTransactions, function() {
+        Events.Subscribe(MoneyApp.Events.UpdatePortfolio, function() {
             MoneyApp.Section.Portfolio($("#portfolio"));
+        });
+        Events.Subscribe(MoneyApp.Events.UpdateInvestmentTransactions, function() {
+            Events.Publish(MoneyApp.Events.UpdatePortfolio, {});
             MoneyApp.Section.InvestmentTransactions($("#investment-transactions"));
         });
         Events.Publish(MoneyApp.Events.UpdateInvestmentTransactions, {});

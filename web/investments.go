@@ -19,7 +19,24 @@ const (
 	FORM_INPUT_TRANSACTION_PRICE = "price"
 	FORM_INPUT_TRANSACTION_QUANTITY = "quantity"
 	FORM_INPUT_TRANSACTION_TYPE = "transaction-type"
+	FORM_INPUT_INVESTMENT_ID = "investmentId"
 )
+
+var investmentUpdateRoute = web.Route{
+	Pattern: URL_INVESTMENT_UPDATE,
+	CsrfProtect: true,
+	Handler: func(r *web.Response) {
+		if ! auth.IsLoggedIn(r.Session.CookieId) {
+			r.SetResponseCode(http.StatusUnauthorized)
+			return
+		}
+		investmentId := r.Request.GetFormValueInt(FORM_INPUT_INVESTMENT_ID)
+		err := investment.UpdateInvestment(uint(investmentId))
+		if err != nil {
+			r.Error(jerr.Get("Error updating user", err), http.StatusInternalServerError)
+		}
+	},
+}
 
 var investmentTransactionsGetRoute = web.Route{
 	Pattern: URL_INVESTMENT_TRANSACTIONS_GET,

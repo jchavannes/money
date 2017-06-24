@@ -32,6 +32,7 @@ func Get(userId uint) (*Portfolio, error) {
 			Quantity: transaction.Quantity,
 			Price: lastInvestmentPrice.Price,
 			Cost: transaction.Quantity * transaction.Price,
+			LastUpdate: lastInvestmentPrice.UpdatedAt,
 			//Value: transaction.Quantity * lastInvestmentPrice.Price,
 			//NetGainLoss: -624.80,
 			//NetGainLossPercent: -46.02,

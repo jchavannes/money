@@ -92,6 +92,25 @@ $(function () {
     MoneyApp.Form = {
         /**
          * @param {jQuery} $form
+         * @param {int} investmentId
+         */
+        UpdateInvestment: function ($form, investmentId) {
+            $form.submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    method: "post",
+                    url: MoneyApp.URL.InvestmentUpdate,
+                    data: {
+                        investmentId: investmentId
+                    },
+                    success: function () {
+                        Events.Publish(MoneyApp.Events.UpdatePortfolio, {});
+                    }
+                });
+            });
+        },
+        /**
+         * @param {jQuery} $form
          * @param {int} transactionId
          */
         DeleteInvestmentTransaction: function ($form, transactionId) {
@@ -110,7 +129,7 @@ $(function () {
                         Events.Publish(MoneyApp.Events.UpdateInvestmentTransactions, {});
                     }
                 });
-            })
+            });
         },
         /**
          * @param {jQuery} $form
@@ -276,21 +295,28 @@ $(function () {
         Portfolio: function ($portfolio, portfolio) {
             var item;
             var i;
+            var lastUpdated;
             var html = "";
             for (i = 0; i < portfolio.Items.length; i++) {
                 /** @type {PortfolioItem} item */
                 item = portfolio.Items[i];
+                lastUpdated = new Date(item.LastUpdate);
                 html +=
                     "<tr>" +
                     "<td>" + item.Investment.Symbol + "</td>" +
-                    "<td>" + item.Quantity + "</td>" +
-                    "<td>" + item.Price + "</td>" +
-                    "<td>" + item.Value + "</td>" +
-                    "<td>" + item.Cost + "</td>" +
-                    "<td>" + item.NetGainLoss + "</td>" +
-                    "<td>" + item.NetGainLossPercent + "</td>" +
-                    "<td>" + item.DistributionPercent + "</td>" +
-                    "<td>" + item.NetGainLossWeighted + "</td>" +
+                    "<td>" + fmt(item.Quantity) + "</td>" +
+                    "<td>$" + fmt(item.Price) + "<br/><i class='sm'>" + lastUpdated.toISOString() + "</i></td>" +
+                    "<td>$" + fmt(item.Value) + "</td>" +
+                    "<td>$" + fmt(item.Cost) + "</td>" +
+                    "<td>$" + fmt(item.NetGainLoss) + "</td>" +
+                    "<td>" + fmt(item.NetGainLossPercent) + "</td>" +
+                    "<td>" + fmt(item.DistributionPercent) + "</td>" +
+                    "<td>" + fmt(item.NetGainLossWeighted) + "</td>" +
+                    "<td>" +
+                    "<form id='update-investment-" + item.Investment.Id + "'>" +
+                    "<input type='submit' class='btn btn-xs btn-success' value='Update'/>" +
+                    "</form>" +
+                    "</td>" +
                     "</tr>";
             }
             html =
@@ -306,6 +332,7 @@ $(function () {
                 "<th>Change</th>" +
                 "<th>Dist.</th>" +
                 "<th>Weighted</th>" +
+                "<th>Actions</th>" +
                 "</tr>" +
                 "</thead>" +
                 "<tbody>" +
@@ -314,6 +341,11 @@ $(function () {
                 "</table>";
             html = MoneyApp.Templates.Snippets.Panel("Portfolio", html);
             $portfolio.html(html);
+            for (i = 0; i < portfolio.Items.length; i++) {
+                item = portfolio.Items[i];
+                console.log(item.Investment.Id);
+                MoneyApp.Form.UpdateInvestment($("#update-investment-" + item.Investment.Id), item.Investment.Id);
+            }
         },
         /**
          * @param {jQuery} $investmentTransactions
@@ -384,7 +416,8 @@ $(function () {
     };
 
     MoneyApp.Events = {
-        UpdateInvestmentTransactions: "update-investment-transactions"
+        UpdateInvestmentTransactions: "update-investment-transactions",
+        UpdatePortfolio: "update-portfolio"
     };
 
     MoneyApp.URL = {
@@ -392,11 +425,16 @@ $(function () {
         LoginSubmit: "login-submit",
         SignupSubmit: "signup-submit",
         PortfolioGet: "portfolio-get",
+        InvestmentUpdate: "investment-update",
         InvestmentTransactionsGet: "investment-transactions-get",
         InvestmentTransactionAdd: "investment-transaction-add",
         InvestmentTransactionDelete: "investment-transaction-delete",
         InvestmentSymbolsGet: "investment-symbols-get"
     };
+
+    function fmt(num) {
+        return parseFloat(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
 });
 
@@ -413,6 +451,7 @@ $(function () {
 
 /**
  * @typedef {{
+ *   Id: int
  *   InvestmentType: string
  *   Symbol: string
  * }} Investment
@@ -440,5 +479,6 @@ $(function () {
  *   NetGainLossPercent: float
  *   DistributionPercent: float
  *   NetGainLossWeighted: float
+ *   LastUpdate string
  * }} PortfolioItem
  */

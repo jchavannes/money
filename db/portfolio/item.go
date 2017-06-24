@@ -1,6 +1,9 @@
 package portfolio
 
-import "git.jasonc.me/main/money/db"
+import (
+	"git.jasonc.me/main/money/db"
+	"time"
+)
 
 type PortfolioItem struct {
 	Investment          db.Investment
@@ -13,4 +16,5 @@ type PortfolioItem struct {
 	NetGainLossPercent  float32
 	DistributionPercent float32
 	NetGainLossWeighted float32
+	LastUpdate          time.Time
 }

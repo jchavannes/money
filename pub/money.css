@@ -43,3 +43,13 @@ footer p {
     max-width: 300px;
     margin: 0 auto;
 }
+
+table th {
+    text-align: center;
+}
+#portfolio table td:nth-child(n+2):nth-child(-n+9) {
+    text-align: right;
+}
+table td i.sm {
+    font-size: 12px;
+}
