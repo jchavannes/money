@@ -3,7 +3,6 @@ package investment
 import (
 	"git.jasonc.me/main/money/db"
 	"time"
-	"fmt"
 	"github.com/jchavannes/jgo/jerr"
 )
 
@@ -19,29 +18,20 @@ func GetTransactionsForUser(userId uint) ([]*db.InvestmentTransaction, error) {
 	return transactions, nil
 }
 
-func AddTransaction(userId uint, investmentType string, symbol string, transactionType db.InvestmentTransactionType, date time.Time, price float32, quantity float32) error {
-	investment := db.Investment{
-		Symbol: symbol,
-		InvestmentType: investmentType,
-	}
-	err := investment.Load()
-	if err != nil {
-		return jerr.Get("Error loading investment", err)
-	}
+func AddTransaction(userId uint, investment *db.Investment, transactionType db.InvestmentTransactionType, date time.Time, price float32, quantity float32) error {
 	investmentTransaction := db.InvestmentTransaction{
 		UserId: userId,
 		Type: transactionType.Uint(),
 		InvestmentId: investment.Id,
-		Investment: investment,
+		Investment: *investment,
 		Date: date,
 		Price: price,
 		Quantity: quantity,
 	}
-	err = investmentTransaction.Save()
+	err := investmentTransaction.Save()
 	if err != nil {
 		return jerr.Get("Error saving investment transaction", err)
 	}
-	fmt.Printf("Saved transaction: %#v\n", investmentTransaction)
 	return nil
 }
 

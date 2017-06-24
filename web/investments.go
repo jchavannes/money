@@ -33,7 +33,7 @@ var investmentUpdateRoute = web.Route{
 		investmentId := r.Request.GetFormValueInt(FORM_INPUT_INVESTMENT_ID)
 		err := investment.UpdateInvestment(uint(investmentId))
 		if err != nil {
-			r.Error(jerr.Get("Error updating user", err), http.StatusInternalServerError)
+			r.Error(jerr.Get("Error updating investment", err), http.StatusInternalServerError)
 		}
 	},
 }
@@ -127,10 +127,22 @@ var investmentTransactionAddRoute = web.Route{
 			transactionType = db.InvestmentTransactionType_Sell
 		}
 
+		transactionInvestment, err := investment.Get(investmentType, investmentSymbol)
+		if err != nil {
+			r.Error(err, http.StatusInternalServerError)
+			return
+		}
+
+		err = investment.UpdateInvestment(transactionInvestment.Id)
+		if err != nil {
+			r.Error(jerr.Get("Error updating investment", err), http.StatusUnprocessableEntity)
+			r.Write("Unable to update investment.")
+			return
+		}
+
 		err = investment.AddTransaction(
 			user.Id,
-			investmentType,
-			investmentSymbol,
+			transactionInvestment,
 			transactionType,
 			transactionDate,
 			float32(transactionPrice),

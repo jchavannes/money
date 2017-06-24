@@ -163,6 +163,14 @@ $(function () {
                     },
                     success: function () {
                         Events.Publish(MoneyApp.Events.UpdateInvestmentTransactions, {});
+                    },
+                    /**
+                     * @param {XMLHttpRequest} xhr
+                     */
+                    error: function (xhr) {
+                        if (xhr.responseText === "Unable to update investment.") {
+                            alert("Unable to update investment. Verify Type and Symbol are correct.");
+                        }
                     }
                 });
             });
@@ -343,7 +351,6 @@ $(function () {
             $portfolio.html(html);
             for (i = 0; i < portfolio.Items.length; i++) {
                 item = portfolio.Items[i];
-                console.log(item.Investment.Id);
                 MoneyApp.Form.UpdateInvestment($("#update-investment-" + item.Investment.Id), item.Investment.Id);
             }
         },
