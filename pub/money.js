@@ -320,9 +320,9 @@ $(function () {
                     "<td>$" + fmt(item.Value) + "</td>" +
                     "<td>$" + fmt(item.Cost) + "</td>" +
                     "<td>$" + fmt(item.NetGainLoss) + "</td>" +
-                    "<td>" + fmt(item.NetGainLossPercent) + "</td>" +
-                    "<td>" + fmt(item.DistributionPercent) + "</td>" +
-                    "<td>" + fmt(item.NetGainLossWeighted) + "</td>" +
+                    "<td>" + fmt(item.NetGainLossPercent * 100) + "%</td>" +
+                    "<td>" + fmt(item.DistributionPercent * 100) + "%</td>" +
+                    "<td>" + fmt(item.NetGainLossWeighted * 100) + "%</td>" +
                     "<td>" +
                     "<form id='update-investment-" + item.Investment.Id + "'>" +
                     "<input type='submit' class='btn btn-xs btn-success' value='Update'/>" +
@@ -330,6 +330,19 @@ $(function () {
                     "</td>" +
                     "</tr>";
             }
+            html +=
+                "<tr class='totals'>" +
+                "<td></td>" +
+                "<td>Totals</td>" +
+                "<td></td>" +
+                "<td>$" + fmt(portfolio.TotalValue) + "</td>" +
+                "<td>$" + fmt(portfolio.TotalCost) + "</td>" +
+                "<td>$" + fmt(portfolio.NetGainLoss) + "</td>" +
+                "<td>" + fmt(portfolio.NetGainLossPercent * 100) + "%</td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "</tr>";
             html =
                 "<table class='table table-bordered table-striped'>" +
                 "<thead>" +
@@ -350,6 +363,25 @@ $(function () {
                 html +
                 "</tbody>" +
                 "</table>";
+            /*html +=
+                "<table class='table table-bordered table-striped table-nofill'>" +
+                "<thead>" +
+                "<tr>" +
+                "<th>Total Cost</th>" +
+                "<th>Total Value</th>" +
+                "<th>Net Gain / Loss</th>" +
+                "<th>Net Gain / Loss Percent</th>" +
+                "</tr>" +
+                "</thead>" +
+                "<tbody>" +
+                "<tr>" +
+                "<td>$" + fmt(portfolio.TotalCost) + "</td>" +
+                "<td>$" + fmt(portfolio.TotalValue) + "</td>" +
+                "<td>$" + fmt(portfolio.NetGainLoss) + "</td>" +
+                "<td>" + fmt(portfolio.NetGainLossPercent * 100) + "%</td>" +
+                "</tr>" +
+                "</tbody>" +
+                "</table>";*/
             html = MoneyApp.Templates.Snippets.Panel("Portfolio", html);
             $portfolio.html(html);
             for (i = 0; i < portfolio.Items.length; i++) {
@@ -443,7 +475,7 @@ $(function () {
     };
 
     /**
-     * @param {float} num
+     * @param {number} num
      * @return {string}
      */
     function fmt(num) {
@@ -463,18 +495,18 @@ Date.prototype.toFormatted = function () {
 
 /**
  * @typedef {{
- *   Id: int
+ *   Id: number
  *   Type: string
  *   Date: string
  *   Investment: Investment
- *   Quantity: float
- *   Price: float
+ *   Quantity: number
+ *   Price: number
  * }} Transaction
  */
 
 /**
  * @typedef {{
- *   Id: int
+ *   Id: number
  *   InvestmentType: string
  *   Symbol: string
  * }} Investment
@@ -483,10 +515,10 @@ Date.prototype.toFormatted = function () {
 /**
  * @typedef {{
  *   Items: []PortfolioItem
- *   TotalValue: float
- *   TotalCost: float
- *   NetGainLoss: float
- *   NetGainLossPercent: float
+ *   TotalValue: number
+ *   TotalCost: number
+ *   NetGainLoss: number
+ *   NetGainLossPercent: number
  * }} Portfolio
  */
 
@@ -494,14 +526,14 @@ Date.prototype.toFormatted = function () {
  * @typedef {{
  *   Investment: Investment
  *   Url: string
- *   Quantity: float
- *   Price: float
- *   Value: float
- *   Cost: float
- *   NetGainLoss: float
- *   NetGainLossPercent: float
- *   DistributionPercent: float
- *   NetGainLossWeighted: float
+ *   Quantity: number
+ *   Price: number
+ *   Value: number
+ *   Cost: number
+ *   NetGainLoss: number
+ *   NetGainLossPercent: number
+ *   DistributionPercent: number
+ *   NetGainLossWeighted: number
  *   LastUpdate string
  * }} PortfolioItem
  */

@@ -33,19 +33,34 @@ func Get(userId uint) (*Portfolio, error) {
 			Price: lastInvestmentPrice.Price,
 			Cost: transaction.Quantity * transaction.Price,
 			LastUpdate: lastInvestmentPrice.UpdatedAt,
-			//Value: transaction.Quantity * lastInvestmentPrice.Price,
-			//NetGainLoss: -624.80,
-			//NetGainLossPercent: -46.02,
-			//DistributionPercent: 0.67,
-			//NetGainLossWeighted: -1.20,
 		}
 		portfolioItems = append(portfolioItems, portfolioItem)
 	}
+	var totalValue float32
+	var totalCost float32
 	for _, portfolioItem := range portfolioItems {
 		portfolioItem.Value = portfolioItem.Quantity * portfolioItem.Price
 		portfolioItem.NetGainLoss = portfolioItem.Value - portfolioItem.Cost
+		if portfolioItem.Cost > 0 {
+			portfolioItem.NetGainLossPercent = (portfolioItem.Value - portfolioItem.Cost) / portfolioItem.Cost
+		}
+		totalValue += portfolioItem.Value
+		totalCost += portfolioItem.Cost
 	}
-	return &Portfolio{
+	if totalValue > 0 {
+		for _, portfolioItem := range portfolioItems {
+			portfolioItem.DistributionPercent = portfolioItem.Value / totalValue
+			portfolioItem.NetGainLossWeighted = portfolioItem.NetGainLossPercent * portfolioItem.DistributionPercent
+		}
+	}
+	portfolio := &Portfolio{
 		Items: portfolioItems,
-	}, nil
+		TotalValue: totalValue,
+		TotalCost: totalCost,
+		NetGainLoss: totalValue - totalCost,
+	}
+	if totalCost > 0 {
+		portfolio.NetGainLossPercent = (totalValue - totalCost) / totalCost
+	}
+	return portfolio, nil
 }
