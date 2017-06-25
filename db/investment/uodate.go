@@ -16,7 +16,7 @@ func UpdateForUser(userId uint) error {
 		if intInSlice(investmentTransaction.InvestmentId, completedInvestmentIds) {
 			continue
 		}
-		err = price.UpdateStockInvestmentFromGoogleFinance(&investmentTransaction.Investment)
+		err = price.UpdateInvestment(&investmentTransaction.Investment)
 		if err != nil {
 			return jerr.Get("Error updating stock investments", err)
 		}
@@ -34,7 +34,7 @@ func UpdateInvestment(investmentId uint) error {
 		return jerr.Get("Error loading investment", err)
 	}
 
-	err = price.UpdateStockInvestmentFromGoogleFinance(&investment)
+	err = price.UpdateInvestment(&investment)
 	if err != nil {
 		return jerr.Get("Error updating stock investments", err)
 	}

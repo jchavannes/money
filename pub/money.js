@@ -313,7 +313,10 @@ $(function () {
                     "<tr>" +
                     "<td>" + item.Investment.Symbol + "</td>" +
                     "<td>" + fmt(item.Quantity) + "</td>" +
-                    "<td>$" + fmt(item.Price) + "<br/><i class='sm'>" + lastUpdated.toISOString() + "</i></td>" +
+                    "<td>" +
+                    "$" + fmt(item.Price) +
+                    "<br/><i class='sm'>" + lastUpdated.toFormatted() + "</i>" +
+                    "</td>" +
                     "<td>$" + fmt(item.Value) + "</td>" +
                     "<td>$" + fmt(item.Cost) + "</td>" +
                     "<td>$" + fmt(item.NetGainLoss) + "</td>" +
@@ -370,8 +373,8 @@ $(function () {
                     "<td>" + transaction.Date.slice(0, 10) + "</td>" +
                     "<td>" + transaction.Investment.InvestmentType.toUpperCase() + "</td>" +
                     "<td>" + transaction.Investment.Symbol + "</td>" +
-                    "<td>" + transaction.Price + "</td>" +
-                    "<td>" + transaction.Quantity + "</td>" +
+                    "<td>$" + fmt(transaction.Price) + "</td>" +
+                    "<td>" + fmt(transaction.Quantity) + "</td>" +
                     "<td>" +
                     "<form id='delete-transaction-" + transaction.Id + "'>" +
                     "<input type='submit' class='btn btn-xs btn-danger' value='Remove'/>" +
@@ -439,11 +442,24 @@ $(function () {
         InvestmentSymbolsGet: "investment-symbols-get"
     };
 
+    /**
+     * @param {float} num
+     * @return {string}
+     */
     function fmt(num) {
         return parseFloat(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
 });
+
+/**
+ * 2006-05-04 03:02:01
+ * @return {string}
+ */
+Date.prototype.toFormatted = function () {
+    var ds = this.toISOString();
+    return ds.slice(0,10) + " " + ds.slice(11,19);
+};
 
 /**
  * @typedef {{

@@ -97,7 +97,7 @@ func UpdateStockInvestmentFromGoogleFinance(investment *db.Investment) error {
 	}
 
 	if totalRowsAdded == 0 {
-		return jerr.New("No rows added or updated.")
+		return jerr.New("No rows added")
 	}
 
 	fmt.Printf("Rows added/updated: %d\n", totalRowsAdded)
