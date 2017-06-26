@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"git.jasonc.me/main/money/db/investment"
+	"git.jasonc.me/main/money/db/price"
 )
 
 func CmdUpdate(userId uint) error {
-	return investment.UpdateForUser(userId)
+	return price.UpdateForUser(userId)
 }

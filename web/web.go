@@ -73,7 +73,6 @@ func RunWeb() error {
 			loginRoute,
 			loginSubmitRoute,
 			logoutRoute,
-			chartRoute,
 			chartGetRoute,
 			portfolioGetRoute,
 			investmentUpdateRoute,

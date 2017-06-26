@@ -9,6 +9,12 @@
 
 <div class="container">
     <div class="row">
+        <div id="chart" class="col-md-12"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
         <div id="portfolio" class="col-md-12"></div>
     </div>
 </div>
@@ -79,6 +85,7 @@
 
 <script type="text/javascript">
     $(function () {
+        MoneyApp.Section.Chart($("#chart"));
         Events.Subscribe(MoneyApp.Events.UpdatePortfolio, function() {
             MoneyApp.Section.Portfolio($("#portfolio"));
         });

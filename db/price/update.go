@@ -1,13 +1,21 @@
-package investment
+package price
 
 import (
 	"github.com/jchavannes/jgo/jerr"
-	"git.jasonc.me/main/money/db/price"
 	"git.jasonc.me/main/money/db"
+	"git.jasonc.me/main/money/db/investment"
 )
 
+func UpdateInvestment(investment *db.Investment) error {
+	if (investment.InvestmentType == db.InvestmentType_Crypto.String()) {
+		return UpdateCryptoInvestmentFromCoinMarketCap(investment)
+	} else {
+		return UpdateStockInvestmentFromGoogleFinance(investment)
+	}
+}
+
 func UpdateForUser(userId uint) error {
-	investmentTransactions, err := GetTransactionsForUser(userId)
+	investmentTransactions, err := investment.GetTransactionsForUser(userId)
 	if err != nil {
 		return jerr.Get("Error getting transactions for user", err)
 	}
@@ -16,7 +24,7 @@ func UpdateForUser(userId uint) error {
 		if intInSlice(investmentTransaction.InvestmentId, completedInvestmentIds) {
 			continue
 		}
-		err = price.UpdateInvestment(&investmentTransaction.Investment)
+		err = UpdateInvestment(&investmentTransaction.Investment)
 		if err != nil {
 			return jerr.Get("Error updating stock investments", err)
 		}
@@ -25,16 +33,16 @@ func UpdateForUser(userId uint) error {
 	return nil
 }
 
-func UpdateInvestment(investmentId uint) error {
-	investment := db.Investment{
+func UpdateInvestmentById(investmentId uint) error {
+	investmentToUpdate := db.Investment{
 		Id: investmentId,
 	}
-	err := investment.Load()
+	err := investmentToUpdate.Load()
 	if err != nil {
 		return jerr.Get("Error loading investment", err)
 	}
 
-	err = price.UpdateInvestment(&investment)
+	err = UpdateInvestment(&investmentToUpdate)
 	if err != nil {
 		return jerr.Get("Error updating stock investments", err)
 	}

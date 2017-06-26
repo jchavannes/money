@@ -50,7 +50,15 @@ $(function () {
                  * @param {string} data
                  */
                 success: function (data) {
-                    console.log(data);
+                    /** @type {ChartDataOutput} chartDataOutput */
+                    var chartDataOutput;
+                    try {
+                        chartDataOutput = JSON.parse(data);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
+                    MoneyApp.Templates.Chart($chart, chartDataOutput);
                 }
             });
         },
@@ -312,6 +320,63 @@ $(function () {
 
     MoneyApp.Templates = {
         /**
+         * @param {jQuery}$chart
+         * @param {ChartDataOutput} chartDataOutput
+         */
+        Chart: function($chart, chartDataOutput) {
+            console.log(chartDataOutput);
+            var name = guid();
+            var $div = $("<div/>").attr('id', name).addClass("full");
+
+            $chart.append($div);
+
+            var seriesOptions = [];
+            for (var i = 0; i < chartDataOutput.Items.length; i++) {
+                /** @type {ChartDataOutputItem} chartDataOutputItem */
+                var chartDataOutputItem = chartDataOutput.Items[i];
+                seriesOptions.push({
+                    name: chartDataOutputItem.Name,
+                    data: chartDataOutputItem.Data
+                });
+            }
+
+            $div.highcharts('StockChart', {
+
+                title: {
+                    text: chartDataOutput.Title
+                },
+
+                rangeSelector: {
+                    inputEnabled: $div.width() > 480,
+                    selected: 5
+                },
+
+                legend: {
+                    enabled: true
+                },
+
+                yAxis: {
+                    floor: 0,
+                    plotLines: [{
+                        value: 0,
+                        width: 2,
+                        color: 'silver'
+                    }]
+                },
+
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
+                    valueDecimals: 2
+                },
+
+                series: seriesOptions,
+
+                credits: {
+                    enabled: false
+                }
+            });
+        },
+        /**
          * @param {jQuery} $portfolio
          * @param {Portfolio} portfolio
          */
@@ -478,6 +543,16 @@ $(function () {
         return parseFloat(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    /**
+     * @return {string}
+     */
+    function guid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+            return v.toString(16);
+        });
+    }
+
 });
 
 /**
@@ -532,4 +607,18 @@ Date.prototype.toFormatted = function () {
  *   NetGainLossWeighted: number
  *   LastUpdate string
  * }} PortfolioItem
+ */
+
+/**
+ * @typedef {{
+ *   Title: string
+ *   Items: []ChartDataOutputItem
+ * }} ChartDataOutput
+ */
+
+/**
+ * @typedef {{
+ *   Name: string
+ *   Data: [][2]number
+ * }} ChartDataOutputItem
  */

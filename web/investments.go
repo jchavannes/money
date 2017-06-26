@@ -9,6 +9,7 @@ import (
 	"time"
 	"strconv"
 	"github.com/jchavannes/jgo/jerr"
+	"git.jasonc.me/main/money/db/price"
 )
 
 const (
@@ -31,7 +32,7 @@ var investmentUpdateRoute = web.Route{
 			return
 		}
 		investmentId := r.Request.GetFormValueInt(FORM_INPUT_INVESTMENT_ID)
-		err := investment.UpdateInvestment(uint(investmentId))
+		err := price.UpdateInvestmentById(uint(investmentId))
 		if err != nil {
 			r.Error(jerr.Get("Error updating investment", err), http.StatusInternalServerError)
 		}
@@ -133,7 +134,7 @@ var investmentTransactionAddRoute = web.Route{
 			return
 		}
 
-		err = investment.UpdateInvestment(transactionInvestment.Id)
+		err = price.UpdateInvestmentById(transactionInvestment.Id)
 		if err != nil {
 			r.Error(jerr.Get("Error updating investment", err), http.StatusUnprocessableEntity)
 			r.Write("Unable to update investment.")
