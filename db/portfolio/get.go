@@ -47,12 +47,6 @@ func Get(userId uint) (*Portfolio, error) {
 		totalValue += portfolioItem.Value
 		totalCost += portfolioItem.Cost
 	}
-	if totalValue > 0 {
-		for _, portfolioItem := range portfolioItems {
-			portfolioItem.DistributionPercent = portfolioItem.Value / totalValue
-			portfolioItem.NetGainLossWeighted = portfolioItem.NetGainLossPercent * portfolioItem.DistributionPercent
-		}
-	}
 	portfolio := &Portfolio{
 		Items: portfolioItems,
 		TotalValue: totalValue,
@@ -61,6 +55,12 @@ func Get(userId uint) (*Portfolio, error) {
 	}
 	if totalCost > 0 {
 		portfolio.NetGainLossPercent = (totalValue - totalCost) / totalCost
+	}
+	if totalValue > 0 {
+		for _, portfolioItem := range portfolioItems {
+			portfolioItem.DistributionPercent = portfolioItem.Value / totalValue
+			portfolioItem.NetGainLossWeighted = portfolioItem.NetGainLoss / (totalValue - totalCost) * portfolio.NetGainLossPercent
+		}
 	}
 	return portfolio, nil
 }

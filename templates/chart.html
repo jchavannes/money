@@ -1,0 +1,22 @@
+{{ template "header.html" . }}
+
+<div class="jumbotron">
+    <div class="container login">
+        <br/><br/><br/>
+        <h2>Chart</h2>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div id="chart" class="col-md-12"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        MoneyApp.Section.Chart($("#chart"))
+    });
+</script>
+
+{{ template "footer.html" . }}

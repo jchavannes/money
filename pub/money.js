@@ -40,6 +40,21 @@ $(function () {
 
     MoneyApp.Section = {
         /**
+         * @param {jQuery} $chart
+         */
+        Chart: function ($chart) {
+            $.ajax({
+                url: MoneyApp.URL.ChartGet,
+                method: "post",
+                /**
+                 * @param {string} data
+                 */
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        },
+        /**
          * @param {jQuery} $portfolio
          */
         Portfolio: function ($portfolio) {
@@ -330,19 +345,6 @@ $(function () {
                     "</td>" +
                     "</tr>";
             }
-            html +=
-                "<tr class='totals'>" +
-                "<td></td>" +
-                "<td>Totals</td>" +
-                "<td></td>" +
-                "<td>$" + fmt(portfolio.TotalValue) + "</td>" +
-                "<td>$" + fmt(portfolio.TotalCost) + "</td>" +
-                "<td>$" + fmt(portfolio.NetGainLoss) + "</td>" +
-                "<td>" + fmt(portfolio.NetGainLossPercent * 100) + "%</td>" +
-                "<td></td>" +
-                "<td></td>" +
-                "<td></td>" +
-                "</tr>";
             html =
                 "<table class='table table-bordered table-striped'>" +
                 "<thead>" +
@@ -361,27 +363,20 @@ $(function () {
                 "</thead>" +
                 "<tbody>" +
                 html +
-                "</tbody>" +
-                "</table>";
-            /*html +=
-                "<table class='table table-bordered table-striped table-nofill'>" +
-                "<thead>" +
-                "<tr>" +
-                "<th>Total Cost</th>" +
-                "<th>Total Value</th>" +
-                "<th>Net Gain / Loss</th>" +
-                "<th>Net Gain / Loss Percent</th>" +
-                "</tr>" +
-                "</thead>" +
-                "<tbody>" +
-                "<tr>" +
-                "<td>$" + fmt(portfolio.TotalCost) + "</td>" +
+                "<tr class='totals'>" +
+                "<td></td>" +
+                "<td>Totals</td>" +
+                "<td></td>" +
                 "<td>$" + fmt(portfolio.TotalValue) + "</td>" +
+                "<td>$" + fmt(portfolio.TotalCost) + "</td>" +
                 "<td>$" + fmt(portfolio.NetGainLoss) + "</td>" +
                 "<td>" + fmt(portfolio.NetGainLossPercent * 100) + "%</td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "<td></td>" +
                 "</tr>" +
                 "</tbody>" +
-                "</table>";*/
+                "</table>";
             html = MoneyApp.Templates.Snippets.Panel("Portfolio", html);
             $portfolio.html(html);
             for (i = 0; i < portfolio.Items.length; i++) {
@@ -467,6 +462,7 @@ $(function () {
         LoginSubmit: "login-submit",
         SignupSubmit: "signup-submit",
         PortfolioGet: "portfolio-get",
+        ChartGet: "chart-get",
         InvestmentUpdate: "investment-update",
         InvestmentTransactionsGet: "investment-transactions-get",
         InvestmentTransactionAdd: "investment-transaction-add",
@@ -490,7 +486,7 @@ $(function () {
  */
 Date.prototype.toFormatted = function () {
     var ds = this.toISOString();
-    return ds.slice(0,10) + " " + ds.slice(11,19);
+    return ds.slice(0, 10) + " " + ds.slice(11, 19);
 };
 
 /**

@@ -50,11 +50,8 @@ footer p {
 #portfolio table td:nth-child(n+2):nth-child(-n+9) {
     text-align: right;
 }
-.table tbody tr td {
-    padding-bottom: 0;
-}
 .table form {
-    margin-bottom: 7px;
+    margin-bottom: 0;
 }
 .table td i.sm {
     font-size: 12px;

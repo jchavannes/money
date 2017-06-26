@@ -53,3 +53,14 @@ func GetLastInvestmentPrice(investment *Investment) (*InvestmentPrice, error) {
 	}
 	return &lastInvestmentPrice, nil
 }
+
+func GetAllInvestmentPricesForInvestment(investment *Investment) ([]*InvestmentPrice, error) {
+	var investmentPrices []*InvestmentPrice
+	result := find(&investmentPrices, &InvestmentPrice{
+		InvestmentId: investment.Id,
+	})
+	if result.Error != nil {
+		return nil, jerr.Get("Error getting investment prices", result.Error)
+	}
+	return investmentPrices, nil
+}
