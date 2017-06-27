@@ -1,12 +1,12 @@
 package chart
 
 import (
-	"git.jasonc.me/main/money/db"
-	"git.jasonc.me/main/money/db/portfolio"
+	"github.com/jchavannes/money/db"
+	"github.com/jchavannes/money/db/portfolio"
 	"github.com/jchavannes/jgo/jerr"
-	"git.jasonc.me/main/money/db/investment"
+	"github.com/jchavannes/money/db/investment"
 	"time"
-	"git.jasonc.me/main/money/db/price"
+	"github.com/jchavannes/money/db/price"
 	"github.com/jchavannes/jgo/jtime"
 )
 

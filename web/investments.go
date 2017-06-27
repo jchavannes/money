@@ -2,14 +2,14 @@ package web
 
 import (
 	"github.com/jchavannes/jgo/web"
-	"git.jasonc.me/main/money/db/auth"
+	"github.com/jchavannes/money/db/auth"
 	"net/http"
-	"git.jasonc.me/main/money/db/investment"
-	"git.jasonc.me/main/money/db"
+	"github.com/jchavannes/money/db/investment"
+	"github.com/jchavannes/money/db"
 	"time"
 	"strconv"
 	"github.com/jchavannes/jgo/jerr"
-	"git.jasonc.me/main/money/db/price"
+	"github.com/jchavannes/money/db/price"
 )
 
 const (

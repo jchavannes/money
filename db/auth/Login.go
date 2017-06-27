@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"git.jasonc.me/main/money/db"
+	"github.com/jchavannes/money/db"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/jchavannes/jgo/jerr"
 )

@@ -1,8 +1,8 @@
 package portfolio
 
 import (
-	"git.jasonc.me/main/money/db/investment"
-	"git.jasonc.me/main/money/db"
+	"github.com/jchavannes/money/db/investment"
+	"github.com/jchavannes/money/db"
 	"github.com/jchavannes/jgo/jerr"
 	"fmt"
 )

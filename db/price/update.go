@@ -2,8 +2,8 @@ package price
 
 import (
 	"github.com/jchavannes/jgo/jerr"
-	"git.jasonc.me/main/money/db"
-	"git.jasonc.me/main/money/db/investment"
+	"github.com/jchavannes/money/db"
+	"github.com/jchavannes/money/db/investment"
 )
 
 func UpdateInvestment(investment *db.Investment) error {

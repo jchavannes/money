@@ -1,7 +1,7 @@
 package price
 
 import (
-	"git.jasonc.me/main/money/db"
+	"github.com/jchavannes/money/db"
 	"github.com/jchavannes/jgo/jerr"
 	"fmt"
 	"net/http"

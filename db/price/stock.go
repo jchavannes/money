@@ -3,7 +3,7 @@ package price
 import (
 	"bufio"
 	"fmt"
-	"git.jasonc.me/main/money/db"
+	"github.com/jchavannes/money/db"
 	"net/http"
 	"regexp"
 	"strconv"

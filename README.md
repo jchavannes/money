@@ -1,17 +1,19 @@
 # Money Tracker
 
-# Application Layers
+### Application Layers
 
-- Template (jQuery, Javascript)
-- Form (AJAX, Javascript)
-- Section (JSApp, Javascript)
-- HTML (Go Templates)
-- HTTP (JGo web)
-- Domain (Chart -> Price?)
-- Object (db directories, e.g. Investment)
-- Data (db)
+| Layer | This project | Description |
+| ----- | ------------ | ----------- |
+| Template | jQuery, Javascript | Dynamic presentation |
+| Form | AJAX, Javascript | Dynamically loading data to front-end |
+| Section | JSApp, Javascript | Initialize sections of page |
+| HTML | Go Templates | Static presentation |
+| HTTP | JGo web | Handle requests and responses |
+| Domain | Chart -> Price? | High-level concepts | 
+| Object | db directories (e.g. Investment) | Collection of data |
+| Data | db (gorm) | Raw data |
 
-**Current**
+#### Current
 
 | Type | Items |
 | ---- | ----- |
@@ -19,7 +21,7 @@
 | Object | auth, chart, investment, portfolio, price |
 | Data | investment, investment_price, investment_transaction, session, user |
 
-**Ideal**
+#### Ideal
 
 | Type | Items |
 | ---- | ----- |

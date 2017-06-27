@@ -2,8 +2,8 @@ package web
 
 import (
 	"github.com/jchavannes/jgo/web"
-	"git.jasonc.me/main/money/db/auth"
-	"git.jasonc.me/main/money/db/portfolio"
+	"github.com/jchavannes/money/db/auth"
+	"github.com/jchavannes/money/db/portfolio"
 	"net/http"
 )
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"git.jasonc.me/main/money/cmd"
+	"github.com/jchavannes/money/cmd"
 	"log"
 )
 

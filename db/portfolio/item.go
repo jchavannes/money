@@ -1,7 +1,7 @@
 package portfolio
 
 import (
-	"git.jasonc.me/main/money/db"
+	"github.com/jchavannes/money/db"
 	"time"
 )
 

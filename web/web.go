@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/jchavannes/jgo/web"
-	"git.jasonc.me/main/money/db/auth"
+	"github.com/jchavannes/money/db/auth"
 	"net/http"
 )
 
@@ -14,7 +14,6 @@ const (
 	URL_LOGIN = "/login"
 	URL_LOGIN_SUBMIT = "/login-submit"
 	URL_LOGOUT = "/logout"
-	URL_CHART = "/chart"
 	URL_CHART_GET = "/chart-get"
 	URL_PORTFOLIO_GET = "/portfolio-get"
 	URL_INVESTMENT_UPDATE = "/investment-update"
