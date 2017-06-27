@@ -1,17 +1,16 @@
 package chart
 
 import (
-	"github.com/jchavannes/money/db"
-	"github.com/jchavannes/money/db/portfolio"
+	"github.com/jchavannes/money/data/db"
+	"github.com/jchavannes/money/object/portfolio"
 	"github.com/jchavannes/jgo/jerr"
-	"github.com/jchavannes/money/db/investment"
 	"time"
-	"github.com/jchavannes/money/db/price"
+	"github.com/jchavannes/money/object/price"
 	"github.com/jchavannes/jgo/jtime"
 )
 
 func GetOverallChartData(userId uint) (*ChartDataOutput, error) {
-	investmentTransactions, err := investment.GetTransactionsForUser(userId)
+	investmentTransactions, err := db.GetTransactionsForUser(userId)
 	if err != nil {
 		return nil, jerr.Get("Error getting investment transactions", err)
 	}

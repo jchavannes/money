@@ -63,3 +63,50 @@ func GetInvestmentTransactionsForUser(userId uint) ([]*InvestmentTransaction, er
 	}
 	return investmentTransactions, nil
 }
+
+func GetTransactionsForUser(userId uint) ([]*InvestmentTransaction, error) {
+	transactions, err := GetInvestmentTransactionsForUser(userId)
+	if err != nil {
+		return []*InvestmentTransaction{}, jerr.Get("Error getting investment transactions for user", err)
+	}
+	for _, transaction := range transactions {
+		transaction.Investment.Id = transaction.InvestmentId
+		transaction.Investment.Load()
+	}
+	return transactions, nil
+}
+
+func AddTransaction(userId uint, investment *Investment, transactionType InvestmentTransactionType, date time.Time, price float32, quantity float32) error {
+	investmentTransaction := InvestmentTransaction{
+		UserId: userId,
+		Type: transactionType.Uint(),
+		InvestmentId: investment.Id,
+		Investment: *investment,
+		Date: date,
+		Price: price,
+		Quantity: quantity,
+	}
+	err := investmentTransaction.Save()
+	if err != nil {
+		return jerr.Get("Error saving investment transaction", err)
+	}
+	return nil
+}
+
+func DeleteTransaction(userId uint, investmentTransactionId uint) error {
+	investmentTransaction := InvestmentTransaction{
+		Id: investmentTransactionId,
+	}
+	err := investmentTransaction.Load()
+	if err != nil {
+		return jerr.Get("Error loading transaction", err)
+	}
+	if investmentTransaction.UserId != userId {
+		return jerr.New("UserId does not match")
+	}
+	err = investmentTransaction.Delete()
+	if err != nil {
+		return jerr.Get("Error deleting transaction", err)
+	}
+	return nil
+}

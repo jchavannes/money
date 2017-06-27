@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/jchavannes/jgo/web"
-	"github.com/jchavannes/money/db/auth"
+	"github.com/jchavannes/money/domain/auth"
 )
 
 var dashboardRoute = web.Route{

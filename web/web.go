@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/jchavannes/jgo/web"
-	"github.com/jchavannes/money/db/auth"
+	"github.com/jchavannes/money/domain/auth"
 	"net/http"
 )
 
@@ -61,8 +61,8 @@ func RunWeb() error {
 		NotFoundHandler: notFoundHandler,
 		Port: 8247,
 		UseSessions: true,
-		TemplatesDir: "templates",
-		StaticFilesDir: "pub",
+		TemplatesDir: "web/templates",
+		StaticFilesDir: "web/pub",
 		PreHandler: preHandler,
 		Routes: []web.Route{
 			indexRoute,

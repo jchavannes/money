@@ -2,8 +2,7 @@ package price
 
 import (
 	"github.com/jchavannes/jgo/jerr"
-	"github.com/jchavannes/money/db"
-	"github.com/jchavannes/money/db/investment"
+	"github.com/jchavannes/money/data/db"
 )
 
 func UpdateInvestment(investment *db.Investment) error {
@@ -15,7 +14,7 @@ func UpdateInvestment(investment *db.Investment) error {
 }
 
 func UpdateForUser(userId uint) error {
-	investmentTransactions, err := investment.GetTransactionsForUser(userId)
+	investmentTransactions, err := db.GetTransactionsForUser(userId)
 	if err != nil {
 		return jerr.Get("Error getting transactions for user", err)
 	}

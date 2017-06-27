@@ -36,6 +36,18 @@ func (i *Investment) Load() error {
 	return nil
 }
 
+func Get(investmentType string, symbol string) (*Investment, error) {
+	investment := &Investment{
+		Symbol: strings.ToLower(symbol),
+		InvestmentType: strings.ToLower(investmentType),
+	}
+	err := investment.Load()
+	if err != nil {
+		return nil, jerr.Get("Error loading investment", err)
+	}
+	return investment, nil
+}
+
 func (s *Investment) GetGoogleFinanceUrl() string {
 	var url = "https://www.google.com/finance/getprices?&i=86400&p=10Y&f=d,c,v,k,o,h,l&df=cpct"
 	return url + "&q=" + strings.ToUpper(s.Symbol) + "&x=" + strings.ToUpper(s.InvestmentType)

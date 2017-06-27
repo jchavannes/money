@@ -2,14 +2,13 @@ package web
 
 import (
 	"github.com/jchavannes/jgo/web"
-	"github.com/jchavannes/money/db/auth"
+	"github.com/jchavannes/money/domain/auth"
 	"net/http"
-	"github.com/jchavannes/money/db/investment"
-	"github.com/jchavannes/money/db"
+	"github.com/jchavannes/money/data/db"
 	"time"
 	"strconv"
 	"github.com/jchavannes/jgo/jerr"
-	"github.com/jchavannes/money/db/price"
+	"github.com/jchavannes/money/object/price"
 )
 
 const (
@@ -52,7 +51,7 @@ var investmentTransactionsGetRoute = web.Route{
 			r.Error(err, http.StatusInternalServerError)
 			return
 		}
-		investmentTransactions, err := investment.GetTransactionsForUser(user.Id)
+		investmentTransactions, err := db.GetTransactionsForUser(user.Id)
 		if err != nil {
 			r.Error(err, http.StatusInternalServerError)
 			return
@@ -70,7 +69,7 @@ var investmentSymbolsGetRoute = web.Route{
 			return
 		}
 		investmentType := r.Request.GetFormValue(FORM_INPUT_INVESTMENT_TYPE)
-		investments, err := investment.GetInvestmentsForType(investmentType)
+		investments, err := db.GetInvestmentsForType(investmentType)
 		if err != nil {
 			r.Error(err, http.StatusInternalServerError)
 			return
@@ -128,7 +127,7 @@ var investmentTransactionAddRoute = web.Route{
 			transactionType = db.InvestmentTransactionType_Sell
 		}
 
-		transactionInvestment, err := investment.Get(investmentType, investmentSymbol)
+		transactionInvestment, err := db.Get(investmentType, investmentSymbol)
 		if err != nil {
 			r.Error(err, http.StatusInternalServerError)
 			return
@@ -141,7 +140,7 @@ var investmentTransactionAddRoute = web.Route{
 			return
 		}
 
-		err = investment.AddTransaction(
+		err = db.AddTransaction(
 			user.Id,
 			transactionInvestment,
 			transactionType,
@@ -178,7 +177,7 @@ var investmentTransactionDeleteRoute = web.Route{
 			return
 		}
 
-		err = investment.DeleteTransaction(
+		err = db.DeleteTransaction(
 			user.Id,
 			uint(transactionId),
 		)

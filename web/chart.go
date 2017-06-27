@@ -2,9 +2,9 @@ package web
 
 import (
 	"github.com/jchavannes/jgo/web"
-	"github.com/jchavannes/money/db/auth"
+	"github.com/jchavannes/money/domain/auth"
 	"net/http"
-	"github.com/jchavannes/money/db/chart"
+	"github.com/jchavannes/money/domain/chart"
 )
 
 var chartGetRoute = web.Route{

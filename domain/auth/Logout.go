@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/jchavannes/money/db"
+	"github.com/jchavannes/money/data/db"
 	"github.com/jchavannes/jgo/jerr"
 )
 

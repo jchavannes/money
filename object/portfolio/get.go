@@ -1,14 +1,13 @@
 package portfolio
 
 import (
-	"github.com/jchavannes/money/db/investment"
-	"github.com/jchavannes/money/db"
+	"github.com/jchavannes/money/data/db"
 	"github.com/jchavannes/jgo/jerr"
 	"fmt"
 )
 
 func Get(userId uint) (*Portfolio, error) {
-	investmentTransactions, err := investment.GetTransactionsForUser(userId)
+	investmentTransactions, err := db.GetTransactionsForUser(userId)
 	if err != nil {
 		return nil, jerr.Get("Error getting transactions for user", err)
 	}
