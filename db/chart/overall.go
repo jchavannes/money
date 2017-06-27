@@ -48,11 +48,11 @@ func GetOverallChartData(userId uint) (*ChartDataOutput, error) {
 				}
 				valueChartItem.ChartDataPoints = append(valueChartItem.ChartDataPoints, valueDataPoint)
 			}
-			for _, investmentTransactions := range investmentTransactions {
-				if investmentTransactions.InvestmentId == portfolioItem.Investment.Id {
-					value := investmentPrice.Price * investmentTransactions.Quantity
-					cost := investmentTransactions.Price * investmentTransactions.Quantity
-					if investmentTransactions.Type == uint(db.InvestmentTransactionType_Buy) {
+			for _, investmentTransaction := range investmentTransactions {
+				if investmentTransaction.InvestmentId == portfolioItem.Investment.Id && investmentTransaction.Date.Unix() < investmentPrice.Timestamp {
+					value := investmentPrice.Price * investmentTransaction.Quantity
+					cost := investmentTransaction.Price * investmentTransaction.Quantity
+					if investmentTransaction.Type == uint(db.InvestmentTransactionType_Buy) {
 						valueDataPoint.Amount += value
 						costDataPoint.Amount += cost
 					} else {
