@@ -51,7 +51,7 @@ var investmentTransactionsGetRoute = web.Route{
 			r.Error(err, http.StatusInternalServerError)
 			return
 		}
-		investmentTransactions, err := db.GetTransactionsForUser(user.Id)
+		investmentTransactions, err := db.GetInvestmentTransactionsForUser(user.Id)
 		if err != nil {
 			r.Error(err, http.StatusInternalServerError)
 			return
@@ -127,7 +127,7 @@ var investmentTransactionAddRoute = web.Route{
 			transactionType = db.InvestmentTransactionType_Sell
 		}
 
-		transactionInvestment, err := db.Get(investmentType, investmentSymbol)
+		transactionInvestment, err := db.GetInvestment(investmentType, investmentSymbol)
 		if err != nil {
 			r.Error(err, http.StatusInternalServerError)
 			return
@@ -140,7 +140,7 @@ var investmentTransactionAddRoute = web.Route{
 			return
 		}
 
-		err = db.AddTransaction(
+		err = db.AddInvestmentTransaction(
 			user.Id,
 			transactionInvestment,
 			transactionType,
@@ -177,7 +177,7 @@ var investmentTransactionDeleteRoute = web.Route{
 			return
 		}
 
-		err = db.DeleteTransaction(
+		err = db.DeleteInvestmentTransaction(
 			user.Id,
 			uint(transactionId),
 		)

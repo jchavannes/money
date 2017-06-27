@@ -7,7 +7,7 @@ import (
 )
 
 func Get(userId uint) (*Portfolio, error) {
-	investmentTransactions, err := db.GetTransactionsForUser(userId)
+	investmentTransactions, err := db.GetInvestmentTransactionsForUser(userId)
 	if err != nil {
 		return nil, jerr.Get("Error getting transactions for user", err)
 	}

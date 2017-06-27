@@ -59,24 +59,16 @@ func GetInvestmentTransactionsForUser(userId uint) ([]*InvestmentTransaction, er
 		UserId: userId,
 	})
 	if result.Error != nil {
-		return []*InvestmentTransaction{}, result.Error
+		return []*InvestmentTransaction{}, jerr.Get("Error getting investment transactions for user", result.Error)
+	}
+	for _, investmentTransaction := range investmentTransactions {
+		investmentTransaction.Investment.Id = investmentTransaction.InvestmentId
+		investmentTransaction.Investment.Load()
 	}
 	return investmentTransactions, nil
 }
 
-func GetTransactionsForUser(userId uint) ([]*InvestmentTransaction, error) {
-	transactions, err := GetInvestmentTransactionsForUser(userId)
-	if err != nil {
-		return []*InvestmentTransaction{}, jerr.Get("Error getting investment transactions for user", err)
-	}
-	for _, transaction := range transactions {
-		transaction.Investment.Id = transaction.InvestmentId
-		transaction.Investment.Load()
-	}
-	return transactions, nil
-}
-
-func AddTransaction(userId uint, investment *Investment, transactionType InvestmentTransactionType, date time.Time, price float32, quantity float32) error {
+func AddInvestmentTransaction(userId uint, investment *Investment, transactionType InvestmentTransactionType, date time.Time, price float32, quantity float32) error {
 	investmentTransaction := InvestmentTransaction{
 		UserId: userId,
 		Type: transactionType.Uint(),
@@ -93,7 +85,7 @@ func AddTransaction(userId uint, investment *Investment, transactionType Investm
 	return nil
 }
 
-func DeleteTransaction(userId uint, investmentTransactionId uint) error {
+func DeleteInvestmentTransaction(userId uint, investmentTransactionId uint) error {
 	investmentTransaction := InvestmentTransaction{
 		Id: investmentTransactionId,
 	}

@@ -10,7 +10,7 @@ import (
 )
 
 func GetOverallChartData(userId uint) (*ChartDataOutput, error) {
-	investmentTransactions, err := db.GetTransactionsForUser(userId)
+	investmentTransactions, err := db.GetInvestmentTransactionsForUser(userId)
 	if err != nil {
 		return nil, jerr.Get("Error getting investment transactions", err)
 	}

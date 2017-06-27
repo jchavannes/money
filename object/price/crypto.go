@@ -23,7 +23,7 @@ func UpdateCryptoInvestmentFromCoinMarketCap(investment *db.Investment) error {
 		lastItemTimestamp = lastItem.Timestamp
 	}
 
-	url := investment.GetCoinMarketCapUrl()
+	url := GetCoinMarketCapUrl(*investment)
 
 	fmt.Printf("Fetching data from: %s\n", url)
 	resp, err := http.Get(url)

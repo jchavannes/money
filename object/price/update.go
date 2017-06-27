@@ -14,7 +14,7 @@ func UpdateInvestment(investment *db.Investment) error {
 }
 
 func UpdateForUser(userId uint) error {
-	investmentTransactions, err := db.GetTransactionsForUser(userId)
+	investmentTransactions, err := db.GetInvestmentTransactionsForUser(userId)
 	if err != nil {
 		return jerr.Get("Error getting transactions for user", err)
 	}

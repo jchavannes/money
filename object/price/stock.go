@@ -20,7 +20,7 @@ func UpdateStockInvestmentFromGoogleFinance(investment *db.Investment) error {
 		lastItemTimestamp = lastItem.Timestamp
 	}
 
-	url := investment.GetGoogleFinanceUrl()
+	url := GetGoogleFinanceUrl(*investment)
 
 	fmt.Printf("Fetching data from: %s\n", url)
 	resp, err := http.Get(url)
