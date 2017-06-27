@@ -4,27 +4,24 @@
 
 | Layer | This project | Description |
 | ----- | ------------ | ----------- |
-| Template | jQuery, Javascript | Dynamic presentation |
-| Form | AJAX, Javascript | Dynamically loading data to front-end |
-| Section | JSApp, Javascript | Initialize sections of page |
-| HTML | Go Templates | Static presentation |
-| HTTP | JGo web | Handle requests and responses |
-| Domain | Chart -> Price? | High-level concepts | 
-| Object | db directories (e.g. Investment) | Collection of data |
-| Data | db (gorm) | Raw data |
+| Template | jQuery (Javascript) | Dynamic presentation |
+| Form | AJAX, WS, jQuery (Javascript) | Dynamically loading data to front-end |
+| Section | JSApp (Javascript) | Initialize sections of page |
+| HTML | HTML (Go Template) | Static presentation |
+| HTTP | JGo web (Go) | Handle requests and responses |
+| Domain | raw (Go) | High-level concepts | 
+| Object | raw (Go) | Collection of data |
+| Data | gorm (Go) | Raw data |
 
-#### Current
+#### Item Examples
 
-| Type | Items |
+| Type | Examples |
 | ---- | ----- |
-| ~~Domain~~ | _none_ |
-| Object | auth, chart, investment, portfolio, price |
-| Data | investment, investment_price, investment_transaction, session, user |
-
-#### Ideal
-
-| Type | Items |
-| ---- | ----- |
+| Template | InvestmentTransactions, Portfolio, Chart |
+| Form | AddInvestmentTransaction, Signup, UpdateInvestment |
+| Section | InvestmentTransactions, Portfolio, Chart |
+| HTML | dashboard.html, singup.html |
+| HTTP | /dashboard, /signup, /signup-submit |
 | Domain | auth, chart |
 | Object | portfolio, price |
-| Data | investment, investment_price, investment_transaction, session, user |
+| Data | db (investment, investment_price, investment_transaction, session, user) |
