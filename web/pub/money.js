@@ -326,9 +326,11 @@ $(function () {
         Chart: function($chart, chartDataOutput) {
             console.log(chartDataOutput);
             var name = guid();
-            var $div = $("<div/>").attr('id', name).addClass("full");
+            var $div = $("<div/>");
 
-            $chart.append($div);
+            var html = MoneyApp.Templates.Snippets.Panel(chartDataOutput.Title, "<div id='" + name + "'></div>");
+            $chart.html(html);
+            $("#" + name).html($div);
 
             var seriesOptions = [];
             for (var i = 0; i < chartDataOutput.Items.length; i++) {
@@ -341,10 +343,6 @@ $(function () {
             }
 
             $div.highcharts('StockChart', {
-
-                title: {
-                    text: chartDataOutput.Title
-                },
 
                 rangeSelector: {
                     inputEnabled: $div.width() > 480,

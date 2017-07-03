@@ -10,12 +10,20 @@
 }
 .navbar-brand h1 {
     display: inline-block;
+    vertical-align: middle;
     font-size: 36px;
     margin: 0;
     padding: 0;
     color: #333;
 }
-.navbar-brand h1 img {
+.navbar-brand h1 span {
+    display: inline-block;
+    color: green;
+    margin-left: 5px;
+}
+.navbar-brand img {
+    display: inline-block;
+    margin-right: 10px;
     width: 45px;
     height: 45px;
 }
