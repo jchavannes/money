@@ -5,6 +5,7 @@ import (
 	"github.com/jchavannes/money/domain/auth"
 	"github.com/jchavannes/money/object/portfolio"
 	"net/http"
+	"sort"
 )
 
 var portfolioGetRoute = web.Route{
@@ -25,6 +26,7 @@ var portfolioGetRoute = web.Route{
 			r.Error(err, http.StatusInternalServerError)
 			return
 		}
+		sort.Sort(portfolio.PortfolioItemSorter(userPortfolio.Items))
 		r.WriteJson(userPortfolio, false)
 	},
 }

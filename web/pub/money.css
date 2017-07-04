@@ -74,5 +74,11 @@ footer p {
 .loading img {
     display: inline-block;
     margin: 10px 0;
+}
 
+table td.gain {
+    color: green;
+}
+table td.loss {
+    color: red;
 }

@@ -18,3 +18,15 @@ type PortfolioItem struct {
 	NetGainLossWeighted float32
 	LastUpdate          time.Time
 }
+
+type PortfolioItemSorter []*PortfolioItem
+
+func (pis PortfolioItemSorter) Len() int {
+	return len(pis)
+}
+func (pis PortfolioItemSorter) Swap(i, j int) {
+	pis[i], pis[j] = pis[j], pis[i]
+}
+func (pis PortfolioItemSorter) Less(i, j int) bool {
+	return pis[i].Value > pis[j].Value
+}

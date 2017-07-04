@@ -383,24 +383,28 @@ $(function () {
             var i;
             var lastUpdated;
             var html = "";
+            var netClass;
             for (i = 0; i < portfolio.Items.length; i++) {
                 /** @type {PortfolioItem} item */
                 item = portfolio.Items[i];
                 lastUpdated = new Date(item.LastUpdate);
+                netClass = item.NetGainLoss > 0 ? "gain" : "loss";
                 html +=
                     "<tr>" +
-                    "<td>" + item.Investment.Symbol + "</td>" +
+                    "<td>" +
+                    item.Investment.Symbol.toUpperCase() +
+                    "<br/><i class='sm'>" + lastUpdated.toFormatted() + "</i>" +
+                    "</td>" +
                     "<td>" + fmt(item.Quantity) + "</td>" +
                     "<td>" +
                     "$" + fmt(item.Price) +
-                    "<br/><i class='sm'>" + lastUpdated.toFormatted() + "</i>" +
                     "</td>" +
                     "<td>$" + fmt(item.Value) + "</td>" +
                     "<td>$" + fmt(item.Cost) + "</td>" +
-                    "<td>$" + fmt(item.NetGainLoss) + "</td>" +
-                    "<td>" + fmt(item.NetGainLossPercent * 100) + "%</td>" +
+                    "<td class='" + netClass + "'>$" + fmt(item.NetGainLoss) + "</td>" +
+                    "<td class='" + netClass + "'>" + fmt(item.NetGainLossPercent * 100) + "%</td>" +
                     "<td>" + fmt(item.DistributionPercent * 100) + "%</td>" +
-                    "<td>" + fmt(item.NetGainLossWeighted * 100) + "%</td>" +
+                    "<td class='" + netClass + "'>" + fmt(item.NetGainLossWeighted * 100) + "%</td>" +
                     "<td>" +
                     "<form id='update-investment-" + item.Investment.Id + "'>" +
                     "<input type='submit' class='btn btn-xs btn-success' value='Update'/>" +
@@ -408,8 +412,9 @@ $(function () {
                     "</td>" +
                     "</tr>";
             }
+            netClass = portfolio.NetGainLoss > 0 ? "gain" : "loss";
             html =
-                "<table class='table table-bordered table-striped'>" +
+                "<table id='portfolio-table' class='table table-bordered table-striped'>" +
                 "<thead>" +
                 "<tr>" +
                 "<th>Name</th>" +
@@ -432,8 +437,8 @@ $(function () {
                 "<td></td>" +
                 "<td>$" + fmt(portfolio.TotalValue) + "</td>" +
                 "<td>$" + fmt(portfolio.TotalCost) + "</td>" +
-                "<td>$" + fmt(portfolio.NetGainLoss) + "</td>" +
-                "<td>" + fmt(portfolio.NetGainLossPercent * 100) + "%</td>" +
+                "<td class='" + netClass + "'>$" + fmt(portfolio.NetGainLoss) + "</td>" +
+                "<td class='" + netClass + "'>" + fmt(portfolio.NetGainLossPercent * 100) + "%</td>" +
                 "<td></td>" +
                 "<td></td>" +
                 "<td></td>" +
@@ -462,7 +467,7 @@ $(function () {
                     "<td>" + (transaction.Type === 1 ? "Buy" : "Sell") + "</td>" +
                     "<td>" + transaction.Date.slice(0, 10) + "</td>" +
                     "<td>" + transaction.Investment.InvestmentType.toUpperCase() + "</td>" +
-                    "<td>" + transaction.Investment.Symbol + "</td>" +
+                    "<td>" + transaction.Investment.Symbol.toUpperCase() + "</td>" +
                     "<td>$" + fmt(transaction.Price) + "</td>" +
                     "<td>" + fmt(transaction.Quantity) + "</td>" +
                     "<td>" +
@@ -473,7 +478,7 @@ $(function () {
                     "</tr>";
             }
             html =
-                "<table class='table table-bordered table-striped'>" +
+                "<table id='investment-transactions-table' class='table table-bordered table-striped'>" +
                 "<thead>" +
                 "<tr>" +
                 "<th>Type</th>" +

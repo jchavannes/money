@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"github.com/jchavannes/jgo/jerr"
 	"github.com/jchavannes/money/object/price"
+	"sort"
 )
 
 const (
@@ -56,6 +57,7 @@ var investmentTransactionsGetRoute = web.Route{
 			r.Error(err, http.StatusInternalServerError)
 			return
 		}
+		sort.Sort(db.InvestmentTransactionSorter(investmentTransactions))
 		r.WriteJson(investmentTransactions, false)
 	},
 }

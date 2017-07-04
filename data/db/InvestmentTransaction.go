@@ -53,6 +53,18 @@ func (i *InvestmentTransaction) Delete() error {
 	return nil
 }
 
+type InvestmentTransactionSorter []*InvestmentTransaction
+
+func (its InvestmentTransactionSorter) Len() int {
+	return len(its)
+}
+func (its InvestmentTransactionSorter) Swap(i, j int) {
+	its[i], its[j] = its[j], its[i]
+}
+func (its InvestmentTransactionSorter) Less(i, j int) bool {
+	return its[i].Date.Unix() > its[j].Date.Unix()
+}
+
 func GetInvestmentTransactionsForUser(userId uint) ([]*InvestmentTransaction, error) {
 	var investmentTransactions []*InvestmentTransaction
 	result := find(&investmentTransactions, &InvestmentTransaction{
