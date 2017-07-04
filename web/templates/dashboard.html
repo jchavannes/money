@@ -9,19 +9,34 @@
 
 <div class="container">
     <div class="row">
-        <div id="chart" class="col-md-12"></div>
+        <div id="chart" class="col-md-12">
+            <div class="loading">
+                <img src="loading.gif"/><br/>
+                Loading...
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="container">
     <div class="row">
-        <div id="portfolio" class="col-md-12"></div>
+        <div id="portfolio" class="col-md-12">
+            <div class="loading">
+                <img src="loading.gif"/><br/>
+                Loading...
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="container">
     <div class="row">
-        <div id="investment-transactions" class="col-md-12"></div>
+        <div id="investment-transactions" class="col-md-12">
+            <div class="loading">
+                <img src="loading.gif"/><br/>
+                Loading...
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -65,11 +80,13 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="input-transaction-price">Unit Price (USD):</label>
-                                <input class="form-control" id="input-transaction-price" type="text" name="transaction-price"/>
+                                <input class="form-control" id="input-transaction-price" type="text"
+                                       name="transaction-price"/>
                             </div>
                             <div class="col-md-6">
                                 <label for="input-transaction-quantity">Quantity:</label>
-                                <input class="form-control" id="input-transaction-quantity" type="text" name="transaction-quantity"/>
+                                <input class="form-control" id="input-transaction-quantity" type="text"
+                                       name="transaction-quantity"/>
                             </div>
                         </div>
                         <br/>
@@ -85,11 +102,11 @@
 
 <script type="text/javascript">
     $(function () {
-        Events.Subscribe(MoneyApp.Events.UpdatePortfolio, function() {
+        Events.Subscribe(MoneyApp.Events.UpdatePortfolio, function () {
             MoneyApp.Section.Portfolio($("#portfolio"));
             MoneyApp.Section.Chart($("#chart"));
         });
-        Events.Subscribe(MoneyApp.Events.UpdateInvestmentTransactions, function() {
+        Events.Subscribe(MoneyApp.Events.UpdateInvestmentTransactions, function () {
             Events.Publish(MoneyApp.Events.UpdatePortfolio, {});
             MoneyApp.Section.InvestmentTransactions($("#investment-transactions"));
         });

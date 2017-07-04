@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 	"errors"
 	"strconv"
-	"fmt"
 	"log"
+	"github.com/jchavannes/jgo/jerr"
 )
 
 var (
@@ -22,7 +22,7 @@ var (
 		RunE: func(c *cobra.Command, args []string) error {
 			err := web.RunWeb()
 			if err != nil {
-				fmt.Println(err)
+				return jerr.Get("Error running web", err)
 			}
 			return nil
 		},
@@ -37,11 +37,11 @@ var (
 			}
 			userId, err := strconv.ParseUint(args[0], 10, 32)
 			if err != nil {
-				return fmt.Errorf("Error parsing userId: %s", err)
+				return jerr.Get("Error parsing userId: " + args[0], err)
 			}
 			err = price.UpdateForUser(uint(userId))
 			if err != nil {
-				fmt.Println(err)
+				return jerr.Get("Error updating user", err)
 			}
 			return nil
 		},

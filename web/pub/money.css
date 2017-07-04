@@ -67,3 +67,12 @@ footer p {
 .table tr.totals td {
     font-weight: bold;
 }
+.loading {
+    text-align: center;
+    padding: 130px 0 170px;
+}
+.loading img {
+    display: inline-block;
+    margin: 10px 0;
+
+}

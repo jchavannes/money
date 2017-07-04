@@ -91,6 +91,17 @@ func fillInChartItem(chartItem *ChartItem) {
 		lastTimeStamp = dataPoint.Timestamp.Unix()
 		lastAmount = dataPoint.Amount
 	}
+	today := time.Now().Unix()
+	nextTimeStamp := lastTimeStamp + jtime.SecondsInDay
+	maxLoopsLeft := 3
+	for lastTimeStamp > 0 && nextTimeStamp <= today && maxLoopsLeft > 0 {
+		additionalDataPoints = append(additionalDataPoints, &ChartDataPoint{
+			Timestamp: time.Unix(nextTimeStamp, 0),
+			Amount: lastAmount,
+		})
+		maxLoopsLeft--
+		nextTimeStamp += jtime.SecondsInDay
+	}
 	chartItem.ChartDataPoints = append(chartItem.ChartDataPoints, additionalDataPoints...)
 	sort.Sort(ChartDataPointSorter(chartItem.ChartDataPoints))
 }
