@@ -1,0 +1,35 @@
+{{ template "header.html" . }}
+
+<div class="jumbotron">
+    <div class="container login">
+        <br/><br/><br/>
+        <h2>Individual Charts</h2>
+    </div>
+</div>
+
+<div class="container">
+    <p>
+        <a class="btn btn-primary" href="dashboard">Dashboard</a>
+    </p>
+</div>
+
+<br/>
+
+<div class="container">
+    <div class="row">
+        <div id="charts" class="col-md-12">
+            <div class="loading">
+                <img src="loading.gif"/><br/>
+                Loading...
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        MoneyApp.Section.AllIndividualCharts($("#charts"));
+    });
+</script>
+
+{{ template "footer.html" . }}

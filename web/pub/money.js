@@ -42,10 +42,67 @@ $(function () {
         /**
          * @param {jQuery} $chart
          */
-        Chart: function ($chart) {
+        OverallChart: function ($chart) {
             $.ajax({
                 url: MoneyApp.URL.ChartGet,
                 method: "post",
+                /**
+                 * @param {string} data
+                 */
+                success: function (data) {
+                    /** @type {ChartDataOutput} chartDataOutput */
+                    var chartDataOutput;
+                    try {
+                        chartDataOutput = JSON.parse(data);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
+                    MoneyApp.Templates.Chart($chart, chartDataOutput);
+                }
+            });
+        },
+        AllIndividualCharts: function ($charts) {
+            $.ajax({
+                url: MoneyApp.URL.PortfolioGet,
+                method: "post",
+                /**
+                 * @param {string} data
+                 */
+                success: function (data) {
+                    /** @type {Portfolio} portfolio */
+                    var portfolio;
+                    try {
+                        portfolio = JSON.parse(data);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
+                    var i;
+                    $charts.html("");
+                    for (i = 0; i < portfolio.Items.length; i++) {
+                        /** @type {PortfolioItem} portfolioItem */
+                        var portfolioItem = portfolio.Items[i];
+                        var divId = "chart-investment-id-" + portfolioItem.Investment.Id;
+                        $charts.append("<div id='" + divId + "'></div>");
+                        MoneyApp.Section.IndividualChart($("#" + divId), portfolioItem.Investment.Symbol, portfolioItem.Investment.InvestmentType);
+                    }
+                }
+            })
+        },
+        /**
+         * @param {jQuery} $chart
+         * @param {string} symbol
+         * @param {string} market
+         */
+        IndividualChart: function ($chart, symbol, market) {
+            $.ajax({
+                url: MoneyApp.URL.IndividualChartGet,
+                method: "post",
+                data: {
+                    symbol: symbol,
+                    market: market
+                },
                 /**
                  * @param {string} data
                  */
@@ -531,6 +588,7 @@ $(function () {
         SignupSubmit: "signup-submit",
         PortfolioGet: "portfolio-get",
         ChartGet: "chart-get",
+        IndividualChartGet: "individual-chart-get",
         InvestmentUpdate: "investment-update",
         InvestmentTransactionsGet: "investment-transactions-get",
         InvestmentTransactionAdd: "investment-transaction-add",

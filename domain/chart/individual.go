@@ -7,15 +7,55 @@ import (
 	"time"
 	"github.com/jchavannes/jgo/jtime"
 	"sort"
+	"github.com/jchavannes/money/object/portfolio"
+	"strings"
 )
+
+func GetIndividualChartData(userId uint, symbol string, market string) (*ChartDataOutput, error) {
+	investmentTransactions, err := db.GetInvestmentTransactionsForUser(userId)
+	if err != nil {
+		return nil, jerr.Get("Error getting investment transactions", err)
+	}
+	userPortfolio, err := portfolio.Get(userId)
+	if err != nil {
+		return nil, jerr.Get("Error getting user portfolio", err)
+	}
+
+	var investment *db.Investment
+	for _, portfolioItem := range userPortfolio.Items {
+		if portfolioItem.Investment.Symbol == symbol && portfolioItem.Investment.InvestmentType == market {
+			investment = &portfolioItem.Investment
+		}
+	}
+	if investment == nil {
+		return nil, jerr.New("Unable to find investment")
+	}
+
+	individualChartItems, err := GetIndividualChartItems(investment, investmentTransactions)
+	if err != nil {
+		return nil, jerr.Get("Error getting individual chart items", err)
+	}
+	if len(individualChartItems) != 2 {
+		return nil, jerr.New("Unexpected number of chart items")
+	}
+
+	chartData := ChartData{
+		Title: strings.ToUpper(investment.InvestmentType) + " - " + strings.ToUpper(investment.Symbol),
+		ChartItems: []*ChartItem{
+			individualChartItems[0],
+			individualChartItems[1],
+		},
+	}
+	return chartData.GetChartDataOutput(), nil
+}
 
 func GetIndividualChartItems(investment *db.Investment, investmentTransactions []*db.InvestmentTransaction) ([]*ChartItem, error) {
 	costChartItem := &ChartItem{
-		Name: investment.Symbol + " - Cost",
+		Name: strings.ToUpper(investment.Symbol) + " - Cost",
 		ChartDataPoints: []*ChartDataPoint{},
 	}
 	valueChartItem := &ChartItem{
-		Name: investment.Symbol + " - Value",
+		Name: strings.ToUpper(investment.Symbol) + " - Value",
 		ChartDataPoints: []*ChartDataPoint{},
 	}
 	history, err := price.GetHistory(investment)

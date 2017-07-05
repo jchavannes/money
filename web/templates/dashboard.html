@@ -8,6 +8,14 @@
 </div>
 
 <div class="container">
+    <p>
+        <a class="btn btn-primary" href="individual">Individual Investments</a>
+    </p>
+</div>
+
+<br/>
+
+<div class="container">
     <div class="row">
         <div id="chart" class="col-md-12">
             <div class="loading">
@@ -104,7 +112,7 @@
     $(function () {
         Events.Subscribe(MoneyApp.Events.UpdatePortfolio, function () {
             MoneyApp.Section.Portfolio($("#portfolio"));
-            MoneyApp.Section.Chart($("#chart"));
+            MoneyApp.Section.OverallChart($("#chart"));
         });
         Events.Subscribe(MoneyApp.Events.UpdateInvestmentTransactions, function () {
             Events.Publish(MoneyApp.Events.UpdatePortfolio, {});
