@@ -12,12 +12,16 @@ func Get(userId uint) (*Portfolio, error) {
 		return nil, jerr.Get("Error getting transactions for user", err)
 	}
 	portfolioItems := []*PortfolioItem{}
-	InvestmentTransactionsLoop:
+InvestmentTransactionsLoop:
 	for _, transaction := range investmentTransactions {
+		transactionQuantity := transaction.Quantity
+		if transaction.Type == uint(db.InvestmentTransactionType_Sell) {
+			transactionQuantity = -transactionQuantity
+		}
 		for i := range portfolioItems {
 			if portfolioItems[i].Investment == transaction.Investment {
-				portfolioItems[i].Quantity += transaction.Quantity
-				portfolioItems[i].Cost += transaction.Quantity * transaction.Price
+				portfolioItems[i].Quantity += transactionQuantity
+				portfolioItems[i].Cost += transactionQuantity * transaction.Price
 				continue InvestmentTransactionsLoop
 			}
 		}
@@ -28,9 +32,9 @@ func Get(userId uint) (*Portfolio, error) {
 		}
 		portfolioItem := &PortfolioItem{
 			Investment: transaction.Investment,
-			Quantity: transaction.Quantity,
-			Price: lastInvestmentPrice.Price,
-			Cost: transaction.Quantity * transaction.Price,
+			Quantity:   transactionQuantity,
+			Price:      lastInvestmentPrice.Price,
+			Cost:       transactionQuantity * transaction.Price,
 			LastUpdate: lastInvestmentPrice.UpdatedAt,
 		}
 		portfolioItems = append(portfolioItems, portfolioItem)
@@ -40,16 +44,16 @@ func Get(userId uint) (*Portfolio, error) {
 	for _, portfolioItem := range portfolioItems {
 		portfolioItem.Value = portfolioItem.Quantity * portfolioItem.Price
 		portfolioItem.NetGainLoss = portfolioItem.Value - portfolioItem.Cost
-		if portfolioItem.Cost > 0 {
+		if portfolioItem.Cost != 0 {
 			portfolioItem.NetGainLossPercent = (portfolioItem.Value - portfolioItem.Cost) / portfolioItem.Cost
 		}
 		totalValue += portfolioItem.Value
 		totalCost += portfolioItem.Cost
 	}
 	portfolio := &Portfolio{
-		Items: portfolioItems,
-		TotalValue: totalValue,
-		TotalCost: totalCost,
+		Items:       portfolioItems,
+		TotalValue:  totalValue,
+		TotalCost:   totalCost,
 		NetGainLoss: totalValue - totalCost,
 	}
 	if totalCost > 0 {

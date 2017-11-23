@@ -13,10 +13,10 @@ func (i InvestmentType) String() string {
 
 const (
 	InvestmentType_NYSEMKT InvestmentType = "nysemkt"
-	InvestmentType_NYSE InvestmentType = "nyse"
-	InvestmentType_NASDAQ InvestmentType = "nasdaq"
-	InvestmentType_Index InvestmentType = "indexsp"
-	InvestmentType_Crypto InvestmentType = "crypto"
+	InvestmentType_NYSE    InvestmentType = "nyse"
+	InvestmentType_NASDAQ  InvestmentType = "nasdaq"
+	InvestmentType_Index   InvestmentType = "indexsp"
+	InvestmentType_Crypto  InvestmentType = "crypto"
 )
 
 type Investment struct {
@@ -38,7 +38,7 @@ func (i *Investment) Load() error {
 
 func GetInvestment(investmentType string, symbol string) (*Investment, error) {
 	investment := &Investment{
-		Symbol: strings.ToLower(symbol),
+		Symbol:         strings.ToLower(symbol),
 		InvestmentType: strings.ToLower(investmentType),
 	}
 	err := investment.Load()

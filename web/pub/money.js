@@ -47,17 +47,9 @@ $(function () {
                 url: MoneyApp.URL.ChartGet,
                 method: "post",
                 /**
-                 * @param {string} data
+                 * @param {ChartDataOutput} chartDataOutput
                  */
-                success: function (data) {
-                    /** @type {ChartDataOutput} chartDataOutput */
-                    var chartDataOutput;
-                    try {
-                        chartDataOutput = JSON.parse(data);
-                    } catch (e) {
-                        console.log(e);
-                        return;
-                    }
+                success: function (chartDataOutput) {
                     MoneyApp.Templates.Chart($chart, chartDataOutput);
                 }
             });
@@ -67,17 +59,9 @@ $(function () {
                 url: MoneyApp.URL.PortfolioGet,
                 method: "post",
                 /**
-                 * @param {string} data
+                 * @param {Portfolio} portfolio
                  */
-                success: function (data) {
-                    /** @type {Portfolio} portfolio */
-                    var portfolio;
-                    try {
-                        portfolio = JSON.parse(data);
-                    } catch (e) {
-                        console.log(e);
-                        return;
-                    }
+                success: function (portfolio) {
                     var i;
                     $charts.html("");
                     for (i = 0; i < portfolio.Items.length; i++) {
@@ -104,17 +88,9 @@ $(function () {
                     market: market
                 },
                 /**
-                 * @param {string} data
+                 * @param {ChartDataOutput} chartDataOutput
                  */
-                success: function (data) {
-                    /** @type {ChartDataOutput} chartDataOutput */
-                    var chartDataOutput;
-                    try {
-                        chartDataOutput = JSON.parse(data);
-                    } catch (e) {
-                        console.log(e);
-                        return;
-                    }
+                success: function (chartDataOutput) {
                     MoneyApp.Templates.Chart($chart, chartDataOutput);
                 }
             });
@@ -127,18 +103,9 @@ $(function () {
                 url: MoneyApp.URL.PortfolioGet,
                 method: "post",
                 /**
-                 * @param {string} data
+                 * @param {Portfolio} portfolio
                  */
-                success: function (data) {
-                    /** @type {Portfolio} portfolio */
-                    var portfolio;
-                    try {
-                        portfolio = JSON.parse(data);
-                    } catch (e) {
-                        console.log(e);
-                        return;
-                    }
-
+                success: function (portfolio) {
                     MoneyApp.Templates.Portfolio($portfolio, portfolio);
                 }
             })
@@ -151,18 +118,9 @@ $(function () {
                 url: MoneyApp.URL.InvestmentTransactionsGet,
                 method: "post",
                 /**
-                 * @param {string} data
+                 * @param {[Transaction]} transactions
                  */
-                success: function (data) {
-                    /** @type {[Transaction]} transactions */
-                    var transactions;
-
-                    try {
-                        transactions = JSON.parse(data);
-                    } catch (e) {
-                        console.log(e);
-                        return;
-                    }
+                success: function (transactions) {
                     MoneyApp.Templates.InvestmentTransactions($investmentTransactions, transactions);
                 }
             })
@@ -263,15 +221,10 @@ $(function () {
                     data: {
                         type: investmentType
                     },
-                    success: function (data) {
-                        var tags;
-                        try {
-                            /** @type {[string]} investments */
-                            tags = JSON.parse(data);
-                        } catch (e) {
-                            console.log(e);
-                            return;
-                        }
+                    /**
+                     * @param {[string]} tags
+                     */
+                    success: function (tags) {
                         if (tags && tags.length > 0) {
                             $investmentSymbolInput.autocomplete({
                                 source: tags
@@ -381,7 +334,6 @@ $(function () {
          * @param {ChartDataOutput} chartDataOutput
          */
         Chart: function($chart, chartDataOutput) {
-            console.log(chartDataOutput);
             var name = guid();
             var $div = $("<div/>");
 
@@ -411,7 +363,7 @@ $(function () {
                 },
 
                 yAxis: {
-                    floor: 0,
+                    min: 0,
                     plotLines: [{
                         value: 0,
                         width: 2,

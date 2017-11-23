@@ -3,10 +3,10 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "FwjxyOGlOWp5TqkqLSYfrdxC1E4=",
+			"checksumSHA1": "+TKtBzv23ywvmmqRiGEjUba4YmI=",
 			"path": "github.com/dgrijalva/jwt-go",
-			"revision": "6c8dedd55f8a2e41f605de6d5d66e51ed1f299fc",
-			"revisionTime": "2017-05-08T16:54:58Z"
+			"revision": "dbeaa9332f19a944acb5736b4456cfcc02140e29",
+			"revisionTime": "2017-10-19T21:57:19Z"
 		},
 		{
 			"checksumSHA1": "g/V4qrXjUGG9B+e3hB+4NAYJ5Gs=",
@@ -15,16 +15,16 @@
 			"revisionTime": "2016-08-17T18:46:32Z"
 		},
 		{
-			"checksumSHA1": "6PQFibmHgsXFHoRQPmkw2V+59Lk=",
+			"checksumSHA1": "3HFUqdhX43kNPJe18WJWCVkthKI=",
 			"path": "github.com/gorilla/mux",
-			"revision": "18fca31550181693b3a834a15b74b564b3605876",
-			"revisionTime": "2017-05-30T19:55:47Z"
+			"revision": "2d5fef06b891c971b14aa6f71ca5ab6c03a36e0e",
+			"revisionTime": "2017-11-09T03:54:02Z"
 		},
 		{
-			"checksumSHA1": "hEnH6sgR83Qfx7UNnphNNlelmj0=",
+			"checksumSHA1": "CndM3N2pHvVUezjuBFfbkqB+XdM=",
 			"path": "github.com/gorilla/websocket",
-			"revision": "a91eba7f97777409bc2c443f5534d41dd20c5720",
-			"revisionTime": "2017-03-19T17:27:27Z"
+			"revision": "23059f29570f0e13fca80ef6aea0f04c11daaa4d",
+			"revisionTime": "2017-11-23T07:25:25Z"
 		},
 		{
 			"checksumSHA1": "40vJyUB4ezQSn/NSadsKEOrudMc=",
@@ -45,16 +45,16 @@
 			"revisionTime": "2017-05-22T00:51:34Z"
 		},
 		{
-			"checksumSHA1": "hA3pKaCPscFk4oqNUPUTYJrm14w=",
+			"checksumSHA1": "KBZAPkgG/bO26yf2KYKLZPyQw9k=",
 			"path": "github.com/jinzhu/gorm",
-			"revision": "9acaa33324bbcc78239a1c913d4f1292c12177b9",
-			"revisionTime": "2017-05-04T14:08:37Z"
+			"revision": "0a51f6cdc55d1650d9ed3b4c13026cfa9133b01e",
+			"revisionTime": "2017-10-10T13:28:39Z"
 		},
 		{
 			"checksumSHA1": "4VZ1gLZHMumRjV3fclS1aX8S1aQ=",
 			"path": "github.com/jinzhu/gorm/dialects/sqlite",
-			"revision": "9acaa33324bbcc78239a1c913d4f1292c12177b9",
-			"revisionTime": "2017-05-04T14:08:37Z"
+			"revision": "0a51f6cdc55d1650d9ed3b4c13026cfa9133b01e",
+			"revisionTime": "2017-10-10T13:28:39Z"
 		},
 		{
 			"checksumSHA1": "VIp1lZm6joWhlNdwhady8u//qRw=",
@@ -63,10 +63,10 @@
 			"revisionTime": "2017-01-02T12:52:26Z"
 		},
 		{
-			"checksumSHA1": "bkkGN70qZCy8YaN89dqB1fONZJU=",
+			"checksumSHA1": "zKDmGyNRpAeeTGXwzKEvy+UY/QQ=",
 			"path": "github.com/mattn/go-sqlite3",
-			"revision": "83772a7051f5e30d8e59746a9e43dfa706b72f3b",
-			"revisionTime": "2017-05-29T14:59:28Z"
+			"revision": "d5ffb5c0cca8778699a929b236766f4a7af674e8",
+			"revisionTime": "2017-11-22T00:24:37Z"
 		},
 		{
 			"checksumSHA1": "mMmcmOYHSJhD0+LhJuDo1DcCkQY=",
@@ -93,10 +93,10 @@
 			"revisionTime": "2017-05-23T23:42:09Z"
 		},
 		{
-			"checksumSHA1": "Y+HGqEkYM15ir+J93MEaHdyFy0c=",
+			"checksumSHA1": "GtamqiJoL7PGHsN454AoffBFMa8=",
 			"path": "golang.org/x/net/context",
-			"revision": "e4fa1c5465ad6111f206fc92186b8c83d64adbe1",
-			"revisionTime": "2017-06-02T19:04:32Z"
+			"revision": "c7086645de248775cbf2373cf5ca4d2fa664b8c1",
+			"revisionTime": "2017-11-10T09:49:23Z"
 		}
 	],
 	"rootPath": "github.com/jchavannes/money"

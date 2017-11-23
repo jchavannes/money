@@ -13,7 +13,7 @@ func (i InvestmentTransactionType) Uint() uint {
 
 const (
 	InvestmentTransactionType_Sell InvestmentTransactionType = 0
-	InvestmentTransactionType_Buy InvestmentTransactionType = 1
+	InvestmentTransactionType_Buy  InvestmentTransactionType = 1
 )
 
 type InvestmentTransaction struct {
@@ -82,13 +82,13 @@ func GetInvestmentTransactionsForUser(userId uint) ([]*InvestmentTransaction, er
 
 func AddInvestmentTransaction(userId uint, investment *Investment, transactionType InvestmentTransactionType, date time.Time, price float32, quantity float32) error {
 	investmentTransaction := InvestmentTransaction{
-		UserId: userId,
-		Type: transactionType.Uint(),
+		UserId:       userId,
+		Type:         transactionType.Uint(),
 		InvestmentId: investment.Id,
-		Investment: *investment,
-		Date: date,
-		Price: price,
-		Quantity: quantity,
+		Investment:   *investment,
+		Date:         date,
+		Price:        price,
+		Quantity:     quantity,
 	}
 	err := investmentTransaction.Save()
 	if err != nil {
