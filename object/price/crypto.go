@@ -44,7 +44,7 @@ func UpdateCryptoInvestmentFromCoinMarketCap(investment *db.Investment) error {
 		timestamp := int64(cryptoJson.PriceUSD[i][0]) / 1000
 		price := cryptoJson.PriceUSD[i][1]
 
-		if price > 10000 || price < 0.0001 || timestamp < lastItemTimestamp {
+		if price > 100000 || price < 0.0001 || timestamp < lastItemTimestamp {
 			continue
 		}
 
