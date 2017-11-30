@@ -6,7 +6,7 @@ import (
 )
 
 func UpdateInvestment(investment *db.Investment) error {
-	if (investment.InvestmentType == db.InvestmentType_Crypto.String()) {
+	if investment.InvestmentType == db.InvestmentType_Crypto.String() {
 		return UpdateCryptoInvestmentFromCoinMarketCap(investment)
 	} else {
 		return UpdateStockInvestmentFromGoogleFinance(investment)
