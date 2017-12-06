@@ -1,14 +1,16 @@
 package main
 
 import (
-	"github.com/jchavannes/money/web"
-	"github.com/jchavannes/money/object/price"
-	"github.com/spf13/cobra"
 	"errors"
-	"strconv"
-	"log"
 	"github.com/jchavannes/jgo/jerr"
+	"github.com/jchavannes/money/object/price"
+	"github.com/jchavannes/money/web"
+	"github.com/spf13/cobra"
+	"log"
+	"strconv"
 )
+
+const FLAG_INSECURE = "insecure"
 
 var (
 	moneyCmd = &cobra.Command{
@@ -20,7 +22,8 @@ var (
 		Use:   "web",
 		Short: "Main browser application",
 		RunE: func(c *cobra.Command, args []string) error {
-			err := web.RunWeb()
+			sessionCookieInsecure, _ := c.Flags().GetBool(FLAG_INSECURE)
+			err := web.RunWeb(sessionCookieInsecure)
 			if err != nil {
 				return jerr.Get("Error running web", err)
 			}
@@ -37,7 +40,7 @@ var (
 			}
 			userId, err := strconv.ParseUint(args[0], 10, 32)
 			if err != nil {
-				return jerr.Get("Error parsing userId: " + args[0], err)
+				return jerr.Get("Error parsing userId: "+args[0], err)
 			}
 			err = price.UpdateForUser(uint(userId))
 			if err != nil {
@@ -47,6 +50,10 @@ var (
 		},
 	}
 )
+
+func init() {
+	webCmd.Flags().Bool(FLAG_INSECURE, false, "Allow session cookie over unencrypted HTTP")
+}
 
 func main() {
 	moneyCmd.AddCommand(webCmd)

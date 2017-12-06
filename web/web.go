@@ -58,7 +58,7 @@ var (
 	}
 )
 
-func RunWeb() error {
+func RunWeb(sessionCookieInsecure bool) error {
 	server := web.Server{
 		NotFoundHandler: notFoundHandler,
 		Port: 8247,
@@ -66,6 +66,7 @@ func RunWeb() error {
 		TemplatesDir: "web/templates",
 		StaticFilesDir: "web/pub",
 		PreHandler: preHandler,
+		InsecureCookie: sessionCookieInsecure,
 		Routes: []web.Route{
 			indexRoute,
 			dashboardRoute,
