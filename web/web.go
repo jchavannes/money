@@ -60,6 +60,7 @@ var (
 
 func RunWeb(sessionCookieInsecure bool) error {
 	server := web.Server{
+		CookiePrefix: "money_tracker",
 		NotFoundHandler: notFoundHandler,
 		Port: 8247,
 		UseSessions: true,
