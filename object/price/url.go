@@ -11,6 +11,6 @@ func GetGoogleFinanceUrl(s db.Investment) string {
 }
 
 func GetCoinMarketCapUrl(s db.Investment) string {
-	var url = "https://graphs.coinmarketcap.com/currencies/"
+	var url = "https://graphs2.coinmarketcap.com/currencies/"
 	return url + strings.ToLower(s.Symbol) + "/"
 }
