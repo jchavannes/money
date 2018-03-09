@@ -19,6 +19,7 @@ const (
 	URL_INDIVIDUAL_CHART_GET = "/individual-chart-get"
 	URL_PORTFOLIO_GET = "/portfolio-get"
 	URL_INVESTMENT_UPDATE = "/investment-update"
+	URL_INVESTMENT_UPDATE_ALL = "/investment-update-all"
 	URL_INVESTMENT_TRANSACTIONS_GET = "/investment-transactions-get"
 	URL_INVESTMENT_TRANSACTION_ADD = "/investment-transaction-add"
 	URL_INVESTMENT_TRANSACTION_DELETE = "/investment-transaction-delete"
@@ -81,6 +82,7 @@ func RunWeb(sessionCookieInsecure bool) error {
 			chartGetRoute,
 			portfolioGetRoute,
 			investmentUpdateRoute,
+			investmentUpdateAllRoute,
 			investmentTransactionsGetRoute,
 			investmentSymbolsGetRoute,
 			investmentTransactionAddRoute,

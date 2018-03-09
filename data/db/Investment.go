@@ -13,6 +13,7 @@ func (i InvestmentType) String() string {
 
 const (
 	InvestmentType_NYSEMKT InvestmentType = "nysemkt"
+	InvestmentType_NYSEAMERICAN InvestmentType = "nyseamerican"
 	InvestmentType_NYSE    InvestmentType = "nyse"
 	InvestmentType_NASDAQ  InvestmentType = "nasdaq"
 	InvestmentType_Index   InvestmentType = "indexsp"

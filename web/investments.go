@@ -39,6 +39,26 @@ var investmentUpdateRoute = web.Route{
 	},
 }
 
+var investmentUpdateAllRoute = web.Route{
+	Pattern: URL_INVESTMENT_UPDATE_ALL,
+	CsrfProtect: true,
+	Handler: func(r *web.Response) {
+		if ! auth.IsLoggedIn(r.Session.CookieId) {
+			r.SetResponseCode(http.StatusUnauthorized)
+			return
+		}
+		user, err := auth.GetSessionUser(r.Session.CookieId)
+		if err != nil {
+			r.Error(err, http.StatusInternalServerError)
+			return
+		}
+		err = price.UpdateForUser(user.Id)
+		if err != nil {
+			r.Error(jerr.Get("Error updating user investments", err), http.StatusInternalServerError)
+		}
+	},
+}
+
 var investmentTransactionsGetRoute = web.Route{
 	Pattern: URL_INVESTMENT_TRANSACTIONS_GET,
 	CsrfProtect: true,

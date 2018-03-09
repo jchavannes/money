@@ -149,6 +149,21 @@ $(function () {
         },
         /**
          * @param {jQuery} $form
+         */
+        UpdateAllInvestments: function ($form) {
+            $form.submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    method: "post",
+                    url: MoneyApp.URL.InvestmentUpdateAll,
+                    success: function () {
+                        Events.Publish(MoneyApp.Events.UpdatePortfolio, {});
+                    }
+                });
+            });
+        },
+        /**
+         * @param {jQuery} $form
          * @param {int} transactionId
          */
         DeleteInvestmentTransaction: function ($form, transactionId) {
@@ -423,6 +438,9 @@ $(function () {
             }
             netClass = portfolio.NetGainLoss > 0 ? "gain" : "loss";
             html =
+                "<form id='update-all-investments'>" +
+                "<input type='submit' class='btn btn-xs btn-success' value='Update All Investments'/>" +
+                "</form>" +
                 "<table id='portfolio-table' class='table table-bordered table-striped'>" +
                 "<thead>" +
                 "<tr>" +
@@ -460,6 +478,7 @@ $(function () {
                 item = portfolio.Items[i];
                 MoneyApp.Form.UpdateInvestment($("#update-investment-" + item.Investment.Id), item.Investment.Id);
             }
+            MoneyApp.Form.UpdateAllInvestments($("#update-all-investments"));
         },
         /**
          * @param {jQuery} $investmentTransactions
@@ -542,6 +561,7 @@ $(function () {
         ChartGet: "chart-get",
         IndividualChartGet: "individual-chart-get",
         InvestmentUpdate: "investment-update",
+        InvestmentUpdateAll: "investment-update-all",
         InvestmentTransactionsGet: "investment-transactions-get",
         InvestmentTransactionAdd: "investment-transaction-add",
         InvestmentTransactionDelete: "investment-transaction-delete",
