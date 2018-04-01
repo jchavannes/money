@@ -7,23 +7,34 @@
 </div>
 
 <div class="container">
-    <ul>
-        <li>An investment tracker for monitoring stocks and crypto currencies.</li>
-        <li>An accounting tool for transactions using a ledger and double entry accounts.</li>
-    </ul>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>A tool for tracking stock and crypto currency investments</h4>
+            <br/>
+            <p>
+                View repo on Github: <a href="https://github.com/jchavannes/money/">github.com/jchavannes/money</a>
+            </p>
+            <br/>
+            <p>
+            {{ with .Username }}
+                <a class="btn btn-success btn-lg" href="dashboard">Dashboard</a>
+            {{ else }}
+                <a class="btn btn-success btn-lg" href="signup">Signup</a>
+                &nbsp; or &nbsp;
+                <a class="btn btn-primary btn-lg" href="login" role="button">Login</a>
+            {{ end }}
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img width="100%" src="ss.png"/>
+        </div>
+    </div>
 </div>
 <div class="container">
     <br/>
-    <br/>
-    <p>
-        {{ with .Username }}
-        <a class="btn btn-success btn-lg" href="dashboard">Dashboard</a>
-        {{ else }}
-        <a class="btn btn-success btn-lg" href="signup">Signup</a>
-        &nbsp; or &nbsp;
-        <a class="btn btn-primary btn-lg" href="login" role="button">Login</a>
-        {{ end }}
-    </p>
+</div>
+
+<div class="container" style="text-align:center;">
 </div>
 
 {{ template "footer.html" . }}
