@@ -1,9 +1,10 @@
 package db
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/jchavannes/gorm"
+	_ "github.com/jchavannes/gorm/dialects/mysql"
 	"github.com/jchavannes/jgo/jerr"
+	"github.com/jchavannes/money/data/config"
 )
 
 var _db *gorm.DB
@@ -24,8 +25,10 @@ func isRecordNotFoundError(e error) bool {
 
 func getDb() (*gorm.DB, error) {
 	if _db == nil {
+		conf := config.GetMysqlConfig()
 		var err error
-		_db, err = gorm.Open("sqlite3", "money.db")
+		connectionString := conf.Username + ":" + conf.Password + "@tcp(" + conf.Host + ")/" + conf.Database + "?parseTime=true"
+		_db, err = gorm.Open("mysql", connectionString)
 		_db.LogMode(false)
 		if err != nil {
 			return _db, jerr.Get("Failed to connect to database", err)
