@@ -416,7 +416,7 @@ $(function () {
                 html +=
                     "<tr>" +
                     "<td>" +
-                    "<a href='https://coinmarketcap.com/currencies/" + item.Investment.Symbol + "/'>" +
+                    "<a href='https://coinmarketcap.com/currencies/" + item.Investment.Symbol + "/' target='_blank'>" +
                     item.Investment.Symbol.toUpperCase() +
                     "</a>" +
                     "<br/><i class='sm'>" + lastUpdated.toFormatted() + "</i>" +
