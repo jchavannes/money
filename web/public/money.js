@@ -416,7 +416,9 @@ $(function () {
                 html +=
                     "<tr>" +
                     "<td>" +
+                    "<a href='https://coinmarketcap.com/currencies/" + item.Investment.Symbol + "/'>" +
                     item.Investment.Symbol.toUpperCase() +
+                    "</a>" +
                     "<br/><i class='sm'>" + lastUpdated.toFormatted() + "</i>" +
                     "</td>" +
                     "<td>" + fmt(item.Quantity) + "</td>" +
@@ -440,6 +442,8 @@ $(function () {
             html =
                 "<form id='update-all-investments'>" +
                 "<input type='submit' class='btn btn-xs btn-success' value='Update All Investments'/>" +
+                " &nbsp; " +
+                "<a class='btn btn-xs btn-default' href='https://coinmarketcap.com/' target='_blank'>Visit CoinMarketCap</a>" +
                 "</form>" +
                 "<table id='portfolio-table' class='table table-bordered table-striped'>" +
                 "<thead>" +
