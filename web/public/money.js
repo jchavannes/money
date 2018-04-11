@@ -421,10 +421,10 @@ $(function () {
                     "</a>" +
                     "<br/><i class='sm'>" + lastUpdated.toFormatted() + "</i>" +
                     "</td>" +
-                    "<td>" + fmt(item.Quantity) + "</td>" +
                     "<td>" +
                     "$" + fmt(item.Price) +
                     "</td>" +
+                    "<td>" + fmt(item.Quantity) + "</td>" +
                     "<td>$" + fmt(item.Value) + "</td>" +
                     "<td>$" + fmt(item.Cost) + "</td>" +
                     "<td class='" + netClass + "'>$" + fmt(item.NetGainLoss) + "</td>" +
@@ -449,8 +449,8 @@ $(function () {
                 "<thead>" +
                 "<tr>" +
                 "<th>Name</th>" +
-                "<th>Qty</th>" +
                 "<th>Price</th>" +
+                "<th>Qty</th>" +
                 "<th>Value</th>" +
                 "<th>Paid</th>" +
                 "<th>Net</th>" +
