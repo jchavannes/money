@@ -360,7 +360,12 @@ $(function () {
             for (var i = 0; i < chartDataOutput.Items.length; i++) {
                 /** @type {ChartDataOutputItem} chartDataOutputItem */
                 var chartDataOutputItem = chartDataOutput.Items[i];
+                var visible = true;
+                if (chartDataOutputItem.Name.toLowerCase().includes("cost")) {
+                    visible = false;
+                }
                 seriesOptions.push({
+                    visible: visible,
                     name: chartDataOutputItem.Name,
                     data: chartDataOutputItem.Data
                 });
@@ -370,7 +375,7 @@ $(function () {
 
                 rangeSelector: {
                     inputEnabled: $div.width() > 480,
-                    selected: 5
+                    selected: 4
                 },
 
                 legend: {

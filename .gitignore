@@ -1,5 +1,6 @@
 /vendor/*/
-money.db
-money
+/money.db
+/money
+/money.exe*
 /config.yaml
 /backups/
