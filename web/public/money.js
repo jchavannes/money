@@ -502,7 +502,7 @@ $(function () {
                 html +=
                     "<tr>" +
                     "<td>" + (transaction.Type === 1 ? "Buy" : "Sell") + "</td>" +
-                    "<td>" + transaction.Date.slice(0, 10) + "</td>" +
+                    "<td title='Created " + transaction.CreatedAt.slice(0,19) + "'>" + transaction.Date.slice(0, 10) + "</td>" +
                     "<td>" + transaction.Investment.InvestmentType.toUpperCase() + "</td>" +
                     "<td>" + transaction.Investment.Symbol.toUpperCase() + "</td>" +
                     "<td>$" + fmt(transaction.Price) + "</td>" +
@@ -647,7 +647,7 @@ Date.prototype.toFormatted = function () {
  *   NetGainLossPercent: number
  *   DistributionPercent: number
  *   NetGainLossWeighted: number
- *   LastUpdate string
+ *   CreatedAt string
  * }} PortfolioItem
  */
 
