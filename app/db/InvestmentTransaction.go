@@ -62,7 +62,10 @@ func (its InvestmentTransactionSorter) Swap(i, j int) {
 	its[i], its[j] = its[j], its[i]
 }
 func (its InvestmentTransactionSorter) Less(i, j int) bool {
-	return its[i].Date.Unix() > its[j].Date.Unix()
+	if its[i].Date.Equal(its[j].Date) {
+		return its[i].Id > its[j].Id
+	}
+	return its[i].Date.After(its[j].Date)
 }
 
 func GetInvestmentTransactionsForUser(userId uint) ([]*InvestmentTransaction, error) {
