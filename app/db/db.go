@@ -18,7 +18,7 @@ var (
 	}
 )
 
-func isRecordNotFoundError(e error) bool {
+func IsRecordNotFoundError(e error) bool {
 	return e.Error() == "record not found"
 }
 

@@ -7,3 +7,7 @@ import (
 func GetHistory(investment *db.Investment) ([]*db.InvestmentPrice, error) {
 	return db.GetAllInvestmentPricesForInvestment(investment)
 }
+
+func GetRecentPrice(investment *db.Investment) (*db.InvestmentPrice, error) {
+	return db.GetLastInvestmentPrice(investment)
+}

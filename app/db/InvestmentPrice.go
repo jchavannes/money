@@ -31,7 +31,7 @@ func (i *InvestmentPrice) AddOrUpdate() error {
 	result := find(findPrice, findPrice)
 	if result.Error == nil {
 		i.Id = findPrice.Id
-	} else if ! isRecordNotFoundError(result.Error) {
+	} else if ! IsRecordNotFoundError(result.Error) {
 		return jerr.Get("Error looking for existing record", result.Error)
 	}
 	result = save(i)

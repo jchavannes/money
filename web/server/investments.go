@@ -139,14 +139,32 @@ var investmentTransactionAddRoute = web.Route{
 			r.Error(err, http.StatusInternalServerError)
 			return
 		}
-
-		err = price.UpdateInvestmentById(transactionInvestment.Id)
-		if err != nil {
-			r.Error(jerr.Get("Error updating investment", err), http.StatusUnprocessableEntity)
-			r.Write("Unable to update investment.")
+		lastInvestment, err := price.GetRecentPrice(transactionInvestment)
+		if err != nil && ! db.IsRecordNotFoundError(err) {
+			r.Error(jerr.Get("error getting recent price from db", err), http.StatusInternalServerError)
 			return
 		}
-
+		updatePrice := func() error {
+			err = price.UpdateInvestmentById(transactionInvestment.Id)
+			if err != nil {
+				return jerr.Get("Error updating investment", err)
+			}
+			return nil
+		}
+		if lastInvestment != nil {
+			go func() {
+				err := updatePrice()
+				if err != nil {
+					jerr.Get("error updating price", err).Print()
+				}
+			}()
+		} else {
+			err = updatePrice()
+			if err != nil {
+				r.Error(jerr.Get("error getting price for new investment", err), http.StatusInternalServerError)
+				return
+			}
+		}
 		err = db.AddInvestmentTransaction(
 			user.Id,
 			transactionInvestment,
