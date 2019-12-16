@@ -7,7 +7,7 @@ import (
 
 func UpdateInvestment(investment *db.Investment) error {
 	if investment.InvestmentType == db.InvestmentType_Crypto.String() {
-		return UpdateCryptoInvestmentFromCoinMarketCap(investment)
+		return UpdateCryptoInvestmentFromCoinMarketCapNew(investment)
 	} else {
 		return UpdateStockInvestmentFromGoogleFinance(investment)
 	}
@@ -19,15 +19,25 @@ func UpdateForUser(userId uint) error {
 		return jerr.Get("Error getting transactions for user", err)
 	}
 	completedInvestmentIds := []uint{}
+	var cryptoInvestments []db.Investment
 	for _, investmentTransaction := range investmentTransactions {
 		if intInSlice(investmentTransaction.InvestmentId, completedInvestmentIds) {
 			continue
+		}
+		if investmentTransaction.Investment.InvestmentType == string(db.InvestmentType_Crypto) {
+			cryptoInvestments = append(cryptoInvestments, investmentTransaction.Investment)
 		}
 		err = UpdateInvestment(&investmentTransaction.Investment)
 		if err != nil {
 			return jerr.Get("Error updating stock investments", err)
 		}
 		completedInvestmentIds = append(completedInvestmentIds, investmentTransaction.InvestmentId)
+	}
+	if len(cryptoInvestments) > 0 {
+		err := UpdateLatestCrypto(cryptoInvestments)
+		if err != nil {
+			return jerr.Get("error updating latest crypto investments", err)
+		}
 	}
 	return nil
 }

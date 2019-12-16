@@ -7,7 +7,7 @@ import (
 )
 
 type InvestmentPrice struct {
-	Id           uint  `gorm:"primary_key"`
+	Id           uint `gorm:"primary_key"`
 	Investment   Investment
 	InvestmentId uint  `gorm:"unique_index:stock_id_timestamp"`
 	Timestamp    int64 `gorm:"unique_index:stock_id_timestamp"`
@@ -47,7 +47,7 @@ func GetLastInvestmentPrice(investment *Investment) (*InvestmentPrice, error) {
 		return nil, jerr.Get("Error getting db", err)
 	}
 	var lastInvestmentPrice InvestmentPrice
-	result := db.Last(&lastInvestmentPrice, InvestmentPrice{InvestmentId: investment.Id})
+	result := db.Order("timestamp DESC").First(&lastInvestmentPrice, InvestmentPrice{InvestmentId: investment.Id})
 	if result.Error != nil {
 		return nil, jerr.Get("Error getting last investment price", result.Error)
 	}
