@@ -19,7 +19,7 @@ var (
 )
 
 func IsRecordNotFoundError(e error) bool {
-	return e.Error() == "record not found"
+	return jerr.HasError(e, "record not found")
 }
 
 func getDb() (*gorm.DB, error) {
