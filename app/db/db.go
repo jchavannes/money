@@ -26,10 +26,10 @@ func getDb() (*gorm.DB, error) {
 	if _db == nil {
 		var err error
 		_db, err = gorm.Open("sqlite3", "money.db")
-		_db.LogMode(false)
 		if err != nil {
 			return _db, jerr.Get("Failed to connect to database", err)
 		}
+		_db.LogMode(false)
 		for _, iface := range dbInterfaces {
 			result := _db.AutoMigrate(iface)
 			if result.Error != nil {

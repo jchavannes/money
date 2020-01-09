@@ -348,7 +348,7 @@ $(function () {
          * @param {jQuery}$chart
          * @param {ChartDataOutput} chartDataOutput
          */
-        Chart: function($chart, chartDataOutput) {
+        Chart: function ($chart, chartDataOutput) {
             var name = guid();
             var $div = $("<div/>");
 
@@ -502,11 +502,11 @@ $(function () {
                 html +=
                     "<tr>" +
                     "<td>" + (transaction.Type === 1 ? "Buy" : "Sell") + "</td>" +
-                    "<td title='Created " + transaction.CreatedAt.slice(0,19) + "'>" + transaction.Date.slice(0, 10) + "</td>" +
+                    "<td title='Created " + transaction.CreatedAt.slice(0, 19) + "'>" + transaction.Date.slice(0, 10) + "</td>" +
                     "<td>" + transaction.Investment.InvestmentType.toUpperCase() + "</td>" +
                     "<td>" + transaction.Investment.Symbol.toUpperCase() + "</td>" +
                     "<td>$" + fmt(transaction.Price) + "</td>" +
-                    "<td>" + fmt(transaction.Quantity) + "</td>" +
+                    "<td>" + fmtVar(transaction.Quantity, 4) + "</td>" +
                     "<td>" +
                     "<form id='delete-transaction-" + transaction.Id + "'>" +
                     "<input type='submit' class='btn btn-xs btn-danger' value='Remove'/>" +
@@ -582,15 +582,26 @@ $(function () {
      * @return {string}
      */
     function fmt(num) {
-        return parseFloat(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return fmtVar(num, 2);
+    }
+
+    /**
+     * @param {number} num
+     * @param {number} digits
+     * @return {string}
+     */
+    function fmtVar(num, digits) {
+        var parts = parseFloat(num).toFixed(digits).toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
     }
 
     /**
      * @return {string}
      */
     function guid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
