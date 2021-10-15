@@ -25,6 +25,7 @@ var symbolTickers = map[string]int{
 	"bitcoin-cash":     1831,
 	"bitcoin-sv":       3602,
 	"bitcoin-cash-abc": 7686,
+	"ecash":            10791,
 }
 
 func GetIdFromSymbol(symbol string) int {
