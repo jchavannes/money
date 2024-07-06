@@ -17,15 +17,26 @@ func GetCoinMarketCapUrl(s db.Investment) string {
 	return url + strings.ToLower(s.Symbol) + "/"
 }
 
+const (
+	SymbolBitcoin        = "bitcoin"
+	SymbolLitecoin       = "litecoin"
+	SymbolRipple         = "ripple"
+	SymbolEthereum       = "ethereum"
+	SymbolBitcoinCash    = "bitcoin-cash"
+	SymbolBitcoinSv      = "bitcoin-sv"
+	SymbolBitcoinCashAbc = "bitcoin-cash-abc"
+	SymbolEcash          = "ecash"
+)
+
 var symbolTickers = map[string]int{
-	"bitcoin":          1,
-	"litecoin":         2,
-	"ripple":           52,
-	"ethereum":         1027,
-	"bitcoin-cash":     1831,
-	"bitcoin-sv":       3602,
-	"bitcoin-cash-abc": 7686,
-	"ecash":            10791,
+	SymbolBitcoin:        1,
+	SymbolLitecoin:       2,
+	SymbolRipple:         52,
+	SymbolEthereum:       1027,
+	SymbolBitcoinCash:    1831,
+	SymbolBitcoinSv:      3602,
+	SymbolBitcoinCashAbc: 7686,
+	SymbolEcash:          10791,
 }
 
 func GetIdFromSymbol(symbol string) int {
