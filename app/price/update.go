@@ -7,7 +7,7 @@ import (
 
 func UpdateInvestment(investment *db.Investment) error {
 	if investment.InvestmentType == db.InvestmentType_Crypto.String() {
-		return UpdateCryptoInvestmentFromCoinMarketCapNew(investment)
+		return CmcHistoryV1(investment)
 	} else {
 		return UpdateStockInvestmentFromGoogleFinance(investment)
 	}
@@ -34,7 +34,7 @@ func UpdateForUser(userId uint) error {
 		completedInvestmentIds = append(completedInvestmentIds, investmentTransaction.InvestmentId)
 	}
 	if len(cryptoInvestments) > 0 {
-		err := UpdateLatestCrypto(cryptoInvestments)
+		err := CmcLatestV1(cryptoInvestments)
 		if err != nil {
 			return jerr.Get("error updating latest crypto investments", err)
 		}

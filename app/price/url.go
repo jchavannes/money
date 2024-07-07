@@ -44,14 +44,14 @@ func GetIdFromSymbol(symbol string) int {
 	return ticker
 }
 
-func GetCoinMarketCapUrlNew(s db.Investment) string {
+func GetCmcHistoryUrlV1(s db.Investment) string {
 	var baseUrl = "https://web-api.coinmarketcap.com/v1/cryptocurrency/quotes/historical?" +
 		"format=chart_crypto_details&convert=USD&interval=1d&time_start=2013-04-28"
 	return fmt.Sprintf("%s&id=%d&time_end=%s",
 		baseUrl, GetIdFromSymbol(s.Symbol), time.Now().AddDate(0, 0, 1).Format("2006-01-02"))
 }
 
-func GetCoinMarketCapUrlLatest(investments []db.Investment) string {
+func GetCmcLatestUrlV1(investments []db.Investment) string {
 	var ids []string
 	for _, investment := range investments {
 		ids = append(ids, fmt.Sprintf("%d", GetIdFromSymbol(investment.Symbol)))

@@ -48,7 +48,7 @@ func GetPricesFromCoinMarketCapV3Json(cryptoJson CryptoJsonV3) ([]*TimePrice, er
 			return nil, fmt.Errorf("error parsing unix time; %w", err)
 		}
 
-		if _, ok := data["v"]; !ok {
+		if _, ok := data["v"]; !ok || len(data["v"]) < 1 {
 			return nil, fmt.Errorf("unable to find usd price")
 		}
 
