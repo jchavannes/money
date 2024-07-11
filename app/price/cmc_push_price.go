@@ -115,10 +115,10 @@ func (c *CmcPushConn) listen() {
 			if neededPrices[i] == investmentPrice.InvestmentId {
 				neededPrices = append(neededPrices[:i], neededPrices[i+1:]...)
 
-				/*if err := investmentPrice.AddOrUpdate(); err != nil {
+				if err := investmentPrice.AddOrUpdate(); err != nil {
 					c.ErrChan <- fmt.Errorf("error updating investment price: %#v; %w", investmentPrice, err)
 					return
-				}*/
+				}
 
 				if len(neededPrices) == 0 {
 					log.Println("All prices received, closing connection")

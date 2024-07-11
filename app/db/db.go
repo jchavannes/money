@@ -4,6 +4,7 @@ import (
 	"github.com/jchavannes/jgo/jerr"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"log"
 )
 
 var _db *gorm.DB
@@ -47,7 +48,10 @@ func create(value interface{}) *gorm.DB {
 }
 
 func find(out interface{}, where ...interface{}) *gorm.DB {
-	db, _ := getDb()
+	db, err := getDb()
+	if err != nil {
+		log.Fatalf("error getting db; %v", err)
+	}
 	result := db.Find(out, where...)
 	return result
 }

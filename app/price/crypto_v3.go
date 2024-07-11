@@ -109,7 +109,7 @@ func saveInvestmentPrices(investment *db.Investment, prices []*TimePrice, lastIt
 	}
 
 	if totalRowsAdded == 0 {
-		return fmt.Errorf("no rows added")
+		return fmt.Errorf("no rows added (%d prices)", len(prices))
 	}
 
 	fmt.Printf("Rows added/updated: %d\n", totalRowsAdded)
