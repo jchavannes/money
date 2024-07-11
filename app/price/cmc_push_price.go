@@ -41,38 +41,34 @@ func RunCmcPushPrice(investments []db.Investment) error {
 
 type CmcPushConn struct {
 	Ctx         context.Context
+	Cancel      context.CancelFunc
 	Conn        *websocket.Conn
 	Investments []db.Investment
 	ErrChan     chan error
 }
 
 func (c *CmcPushConn) Run() error {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
-	defer cancel()
-	c.Ctx = ctx
+	c.Ctx, c.Cancel = context.WithTimeout(context.Background(), 1*time.Minute)
+	defer c.Cancel()
 
 	var err error
-	if c.Conn, _, err = websocket.Dial(ctx, GetCmcPushPriceUrl(), nil); err != nil {
+	if c.Conn, _, err = websocket.Dial(c.Ctx, GetCmcPushPriceUrl(), nil); err != nil {
 		return fmt.Errorf("error dialing websocket; %w", err)
 	}
-	defer func() {
-		if err := c.Conn.CloseNow(); err != nil {
-			log.Printf("error closing websocket; %v", err)
-		}
-	}()
+	defer c.Conn.CloseNow()
 
 	go c.subscribe()
 	go c.listen()
 
 	select {
-	case <-ctx.Done():
+	case <-c.Ctx.Done():
 		break
 	case err := <-c.ErrChan:
 		return fmt.Errorf("error processing websocket message; %w", err)
 	}
 
 	if err := c.Conn.Close(websocket.StatusNormalClosure, ""); err != nil {
-		return fmt.Errorf("error closing websocket; %w", err)
+		return fmt.Errorf("error closing websocket normal; %w", err)
 	}
 
 	return nil
@@ -87,8 +83,10 @@ func (c *CmcPushConn) subscribe() {
 }
 
 func (c *CmcPushConn) listen() {
-	// TODO: Parse different message types and save prices.
-	// TODO: Once each investment has had a price update, close.
+	var neededPrices = make([]uint, len(c.Investments))
+	for i := range c.Investments {
+		neededPrices[i] = c.Investments[i].Id
+	}
 	for {
 		msgType, msg, err := c.Conn.Read(c.Ctx)
 		if err != nil {
@@ -100,6 +98,37 @@ func (c *CmcPushConn) listen() {
 			return
 		}
 		log.Printf("Received message: %s\n", string(msg))
+
+		investmentPrice, err := GetInvestmentPriceFromCmcPushMessage(msg, c.Investments)
+		if err != nil {
+			c.ErrChan <- fmt.Errorf("error processing websocket message; %w", err)
+			return
+		}
+
+		if investmentPrice == nil {
+			continue
+		}
+
+		investmentPrice.Print()
+
+		for i := 0; i < len(neededPrices); i++ {
+			if neededPrices[i] == investmentPrice.InvestmentId {
+				neededPrices = append(neededPrices[:i], neededPrices[i+1:]...)
+
+				/*if err := investmentPrice.AddOrUpdate(); err != nil {
+					c.ErrChan <- fmt.Errorf("error updating investment price: %#v; %w", investmentPrice, err)
+					return
+				}*/
+
+				if len(neededPrices) == 0 {
+					log.Println("All prices received, closing connection")
+					c.Cancel()
+					return
+				}
+
+				break
+			}
+		}
 	}
 }
 
