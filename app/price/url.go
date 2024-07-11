@@ -56,7 +56,8 @@ func GetCmcLatestUrlV1(investments []db.Investment) string {
 	for _, investment := range investments {
 		ids = append(ids, fmt.Sprintf("%d", GetIdFromSymbol(investment.Symbol)))
 	}
-	return fmt.Sprintf("https://web-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=%s", strings.Join(ids, ","))
+	return fmt.Sprintf("https://web-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=%s",
+		strings.Join(ids, ","))
 }
 
 func GetCoinMarketCapUrlV3(symbol string) string {
@@ -64,4 +65,17 @@ func GetCoinMarketCapUrlV3(symbol string) string {
 		"https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?range=1Y&id=%d",
 		GetIdFromSymbol(symbol),
 	)
+}
+
+func GetCmcPushPriceUrl() string {
+	return "wss://push.coinmarketcap.com/ws?device=web&client_source=coin_detail_page"
+}
+
+func GetCmcPushPriceSubscribeMessage(investments []db.Investment) string {
+	var ids = make([]string, len(investments))
+	for i := range investments {
+		ids[i] = fmt.Sprintf("%d", GetIdFromSymbol(investments[i].Symbol))
+	}
+	return fmt.Sprintf(`{"method":"RSUBSCRIPTION","params":["main-site@crypto_price_5s@{}@normal","%s"]}`,
+		strings.Join(ids, ","))
 }

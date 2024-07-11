@@ -6,8 +6,6 @@ import (
 	"github.com/jchavannes/money/app/db"
 	"log"
 	"nhooyr.io/websocket"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -27,60 +25,76 @@ type CmcPushPriceJsonD struct {
 	Price float64 `json:"p"`
 }
 
-func CmcPushPrice(investments []db.Investment) error {
-	url := "wss://push.coinmarketcap.com/ws?device=web&client_source=coin_detail_page"
-	var idStrings = make([]string, len(investments))
-	for i := range investments {
-		idStrings[i] = strconv.Itoa(GetIdFromSymbol(investments[i].Symbol))
+func RunCmcPushPrice(investments []db.Investment) error {
+	var pc = &CmcPushConn{
+		Investments: investments,
+		ErrChan:     make(chan error),
 	}
-	log.Printf("id strings: %s\n", strings.Join(idStrings, ","))
-	sendMessage := `{"method":"RSUBSCRIPTION","params":["main-site@crypto_price_5s@{}@normal","` + strings.Join(idStrings, ",") + `"]}`
 
+	if err := pc.Run(); err != nil {
+		return fmt.Errorf("error subscribing and listening to websocket; %w", err)
+	}
+	return nil
+}
+
+type CmcPushConn struct {
+	Ctx         context.Context
+	Conn        *websocket.Conn
+	Investments []db.Investment
+	ErrChan     chan error
+}
+
+func (c *CmcPushConn) Run() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
 	defer cancel()
+	c.Ctx = ctx
 
-	log.Println("Connecting to websocket...")
-	conn, _, err := websocket.Dial(ctx, url, nil)
-	if err != nil {
+	var err error
+	if c.Conn, _, err = websocket.Dial(ctx, GetCmcPushPriceUrl(), nil); err != nil {
 		return fmt.Errorf("error dialing websocket; %w", err)
 	}
-	defer conn.CloseNow()
-
-	var errChan = make(chan error)
-
-	go func() {
-		time.Sleep(1 * time.Second)
-		log.Println("Sending websocket subscribe message")
-		if err := conn.Write(ctx, websocket.MessageText, []byte(sendMessage)); err != nil {
-			errChan <- fmt.Errorf("error writing websocket message; %w", err)
+	defer func() {
+		if err := c.Conn.CloseNow(); err != nil {
+			log.Printf("error closing websocket; %v", err)
 		}
 	}()
 
-	go func() {
-		for {
-			msgType, msg, err := conn.Read(ctx)
-			if err != nil {
-				errChan <- fmt.Errorf("error reading websocket message; %w", err)
-				return
-			}
-			if msgType != websocket.MessageText {
-				errChan <- fmt.Errorf("unexpected message type; %w", err)
-				return
-			}
-			log.Printf("Received message: %s\n", string(msg))
-		}
-	}()
+	go c.subscribe()
+	go c.listen()
 
 	select {
 	case <-ctx.Done():
 		break
-	case err := <-errChan:
+	case err := <-c.ErrChan:
 		return fmt.Errorf("error processing websocket message; %w", err)
 	}
 
-	if err := conn.Close(websocket.StatusNormalClosure, ""); err != nil {
+	if err := c.Conn.Close(websocket.StatusNormalClosure, ""); err != nil {
 		return fmt.Errorf("error closing websocket; %w", err)
 	}
 
 	return nil
+}
+
+func (c *CmcPushConn) subscribe() {
+	log.Println("Sending websocket subscribe message")
+	msg := GetCmcPushPriceSubscribeMessage(c.Investments)
+	if err := c.Conn.Write(c.Ctx, websocket.MessageText, []byte(msg)); err != nil {
+		c.ErrChan <- fmt.Errorf("error writing websocket message; %w", err)
+	}
+}
+
+func (c *CmcPushConn) listen() {
+	for {
+		msgType, msg, err := c.Conn.Read(c.Ctx)
+		if err != nil {
+			c.ErrChan <- fmt.Errorf("error reading websocket message; %w", err)
+			return
+		}
+		if msgType != websocket.MessageText {
+			c.ErrChan <- fmt.Errorf("unexpected message type; %w", err)
+			return
+		}
+		log.Printf("Received message: %s\n", string(msg))
+	}
 }
