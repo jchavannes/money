@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jchavannes/money/app/db"
 	"io"
+	"log"
 	"net/http"
 	"sort"
 	"strconv"
@@ -17,7 +18,7 @@ func CmcHistoryV3(investment *db.Investment) error {
 		return nil
 	}
 
-	cmcBody, err := fetchCmcHistoryV3(investment)
+	cmcBody, err := FetchCmcHistoryV3(investment)
 	if err != nil {
 		return fmt.Errorf("error getting cmc history v3; %w", err)
 	}
@@ -33,11 +34,16 @@ func CmcHistoryV3(investment *db.Investment) error {
 	return nil
 }
 
-func fetchCmcHistoryV3(investment *db.Investment) ([]byte, error) {
+func FetchCmcHistoryV3(investment *db.Investment) ([]byte, error) {
 	url := GetCoinMarketCapUrlV3(investment.Symbol)
 
-	fmt.Printf("Fetching data from: %s\n", url)
-	resp, err := http.Get(url)
+	log.Printf("Fetching data from: %s\n", url)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", "Mozilla/5.0")
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error getting crypto data; %w", err)
 	}

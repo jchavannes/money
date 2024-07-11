@@ -1,12 +1,25 @@
 package price_test
 
 import (
+	"github.com/jchavannes/money/app/db"
 	"github.com/jchavannes/money/app/price"
 	"log"
 	"os"
 	"testing"
 	"time"
 )
+
+func TestCmcHistoryV3(t *testing.T) {
+	t.Skip("Skipping test TestCmcHistoryV3 since it will make a network call to fetch data from coinmarketcap.com")
+	history, err := price.FetchCmcHistoryV3(&db.Investment{
+		Symbol: price.SymbolBitcoinCash,
+	})
+	if err != nil {
+		t.Errorf("error fetching cmc history v3; %v", err)
+		return
+	}
+	log.Printf("history: %s\n", history)
+}
 
 func TestGetCoinMarketCapUrlV3(t *testing.T) {
 	url := price.GetCoinMarketCapUrlV3(price.SymbolBitcoinCash)
