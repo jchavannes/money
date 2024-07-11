@@ -34,7 +34,7 @@ func UpdateForUser(userId uint) error {
 		completedInvestmentIds = append(completedInvestmentIds, investmentTransaction.InvestmentId)
 	}
 	if len(cryptoInvestments) > 0 {
-		err := CmcLatestV1(cryptoInvestments)
+		err := RunCmcPushPrice(cryptoInvestments)
 		if err != nil {
 			return jerr.Get("error updating latest crypto investments", err)
 		}
