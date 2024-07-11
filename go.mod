@@ -7,4 +7,5 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/spf13/cobra v1.1.3
 	golang.org/x/crypto v0.17.0
+	nhooyr.io/websocket v1.8.11
 )
