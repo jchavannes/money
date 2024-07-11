@@ -58,3 +58,10 @@ func GetCmcLatestUrlV1(investments []db.Investment) string {
 	}
 	return fmt.Sprintf("https://web-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=%s", strings.Join(ids, ","))
 }
+
+func GetCoinMarketCapUrlV3(symbol string) string {
+	return fmt.Sprintf(
+		"https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?range=1Y&id=%d",
+		GetIdFromSymbol(symbol),
+	)
+}

@@ -7,7 +7,7 @@ import (
 
 func UpdateInvestment(investment *db.Investment) error {
 	if investment.InvestmentType == db.InvestmentType_Crypto.String() {
-		return CmcHistoryV1(investment)
+		return CmcHistoryV3(investment)
 	} else {
 		return UpdateStockInvestmentFromGoogleFinance(investment)
 	}

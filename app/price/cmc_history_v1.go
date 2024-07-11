@@ -7,6 +7,7 @@ import (
 	"github.com/jchavannes/money/app/db"
 	"io"
 	"net/http"
+	"sort"
 	"time"
 )
 
@@ -25,7 +26,12 @@ func CmcHistoryV1(investment *db.Investment) error {
 		return jerr.Get("Error getting crypto json new", err)
 	}
 
-	if err := saveCmcHistoryJsonV1(investment, cmcJson, lastItemTimestamp); err != nil {
+	prices, err := GetPricesFromCmcV1History(cmcJson)
+	if err != nil {
+		return jerr.Get("Error getting prices from cmc history new", err)
+	}
+
+	if err := saveInvestmentPrices(investment, prices, lastItemTimestamp); err != nil {
 		return jerr.Get("Error saving crypto json new", err)
 	}
 	return nil
@@ -55,56 +61,30 @@ func fetchCmcHistoryJsonV1(investment *db.Investment) (*CmcHistoryJsonV1, error)
 	return &cmcJson, nil
 }
 
-func saveCmcHistoryJsonV1(investment *db.Investment, cmcJson *CmcHistoryJsonV1, lastItemTimestamp int64) error {
-	var totalRowsAdded int
+func GetPricesFromCmcV1History(cmcJson *CmcHistoryJsonV1) ([]*TimePrice, error) {
+	var timePrices []*TimePrice
 	for dateString, prices := range cmcJson.Data {
-		investmentPrice, err := getInvestmentPriceFromCmcJsonV1(investment, dateString, prices)
+		date, err := time.Parse("2006-01-02T15:04:05.000Z", dateString)
 		if err != nil {
-			return jerr.Get("Error getting investment price", err)
+			return nil, jerr.Get("Error parsing time", err)
 		}
 
-		if investmentPrice.Price > 100000 || investmentPrice.Price < 0.0001 ||
-			investmentPrice.Timestamp < lastItemTimestamp {
-			continue
+		usd, ok := prices["USD"]
+		if !ok || len(usd) < 1 {
+			return nil, jerr.New("Unable to find usd price")
 		}
+		price := usd[0]
 
-		investmentPrice.Print()
-
-		err = investmentPrice.AddOrUpdate()
-		if err != nil {
-			return jerr.Get(fmt.Sprintf("Error updating investment price: %#v", investmentPrice), err)
-		}
-
-		totalRowsAdded++
+		timePrices = append(timePrices, &TimePrice{
+			Time:  date,
+			Price: float64(price),
+		})
 	}
 
-	if totalRowsAdded == 0 {
-		return jerr.New("No rows added")
-	}
+	sort.Slice(timePrices, func(i, j int) bool {
+		return timePrices[i].Time.Before(timePrices[j].Time)
+	})
 
-	fmt.Printf("Rows added/updated: %d\n", totalRowsAdded)
-	return nil
-}
+	return timePrices, nil
 
-func getInvestmentPriceFromCmcJsonV1(investment *db.Investment, dateString string, prices map[string][]float32) (*db.InvestmentPrice, error) {
-	date, err := time.Parse("2006-01-02T15:04:05.000Z", dateString)
-	if err != nil {
-		return nil, jerr.Get("error parsing time", err)
-	}
-	timestamp := date.Unix()
-
-	usd, ok := prices["USD"]
-	if !ok || len(usd) < 1 {
-		return nil, jerr.New("unable to find usd price")
-	}
-	price := usd[0]
-
-	var investmentPrice = &db.InvestmentPrice{
-		Timestamp:    timestamp,
-		Price:        price,
-		InvestmentId: investment.Id,
-		Investment:   *investment,
-	}
-
-	return investmentPrice, nil
 }
