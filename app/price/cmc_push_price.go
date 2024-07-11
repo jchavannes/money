@@ -2,10 +2,12 @@ package price
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/jchavannes/money/app/db"
 	"log"
 	"nhooyr.io/websocket"
+	"strconv"
 	"time"
 )
 
@@ -22,7 +24,7 @@ type CmcPushPriceJson struct {
 
 type CmcPushPriceJsonD struct {
 	Id    int     `json:"id"`
-	Price float64 `json:"p"`
+	Price float32 `json:"p"`
 }
 
 func RunCmcPushPrice(investments []db.Investment) error {
@@ -85,6 +87,8 @@ func (c *CmcPushConn) subscribe() {
 }
 
 func (c *CmcPushConn) listen() {
+	// TODO: Parse different message types and save prices.
+	// TODO: Once each investment has had a price update, close.
 	for {
 		msgType, msg, err := c.Conn.Read(c.Ctx)
 		if err != nil {
@@ -97,4 +101,38 @@ func (c *CmcPushConn) listen() {
 		}
 		log.Printf("Received message: %s\n", string(msg))
 	}
+}
+
+func GetInvestmentPriceFromCmcPushMessage(msg []byte, investments []db.Investment) (*db.InvestmentPrice, error) {
+	var cmcPushPriceJson CmcPushPriceJson
+	if err := json.Unmarshal(msg, &cmcPushPriceJson); err != nil {
+		return nil, fmt.Errorf("error parsing cmc push price; %w", err)
+	}
+
+	if cmcPushPriceJson.D.Id == 0 {
+		// Different socket message
+		return nil, nil
+	}
+
+	timeInt, err := strconv.Atoi(cmcPushPriceJson.Time)
+	if err != nil {
+		return nil, fmt.Errorf("error converting time to int; %w", err)
+	}
+
+	var foundInvestment *db.Investment
+	for _, investment := range investments {
+		if cmcPushPriceJson.D.Id == GetIdFromSymbol(investment.Symbol) {
+			foundInvestment = &investment
+		}
+	}
+	if foundInvestment == nil {
+		return nil, fmt.Errorf("unable to find investment for price id: %d", cmcPushPriceJson.D.Id)
+	}
+
+	return &db.InvestmentPrice{
+		Investment:   *foundInvestment,
+		InvestmentId: foundInvestment.Id,
+		Timestamp:    time.UnixMilli(int64(timeInt)).Unix(),
+		Price:        cmcPushPriceJson.D.Price,
+	}, nil
 }

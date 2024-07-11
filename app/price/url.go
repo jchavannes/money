@@ -26,17 +26,26 @@ const (
 	SymbolBitcoinSv      = "bitcoin-sv"
 	SymbolBitcoinCashAbc = "bitcoin-cash-abc"
 	SymbolEcash          = "ecash"
+
+	IdBitcoin        = 1
+	IdLitecoin       = 2
+	IdRipple         = 52
+	IdEthereum       = 1027
+	IdBitcoinCash    = 1831
+	IdBitcoinSv      = 3602
+	IdBitcoinCashAbc = 7686
+	IdEcash          = 10791
 )
 
 var symbolTickers = map[string]int{
-	SymbolBitcoin:        1,
-	SymbolLitecoin:       2,
-	SymbolRipple:         52,
-	SymbolEthereum:       1027,
-	SymbolBitcoinCash:    1831,
-	SymbolBitcoinSv:      3602,
-	SymbolBitcoinCashAbc: 7686,
-	SymbolEcash:          10791,
+	SymbolBitcoin:        IdBitcoin,
+	SymbolLitecoin:       IdLitecoin,
+	SymbolRipple:         IdRipple,
+	SymbolEthereum:       IdEthereum,
+	SymbolBitcoinCash:    IdBitcoinCash,
+	SymbolBitcoinSv:      IdBitcoinSv,
+	SymbolBitcoinCashAbc: IdBitcoinCashAbc,
+	SymbolEcash:          IdEcash,
 }
 
 func GetIdFromSymbol(symbol string) int {
