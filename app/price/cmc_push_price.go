@@ -18,11 +18,13 @@ type CmcPushAckJson struct {
 }
 
 type CmcPushPriceJson struct {
-	D struct {
-		Id    int     `json:"id"`
-		Price float64 `json:"p"`
-		Time  string  `json:"t"` // eg. "1720661812642"
-	} `json:"d"`
+	D    CmcPushPriceJsonD `json:"d"`
+	Time string            `json:"t"` // eg. "1720661812642"
+}
+
+type CmcPushPriceJsonD struct {
+	Id    int     `json:"id"`
+	Price float64 `json:"p"`
 }
 
 func CmcPushPrice(investments []db.Investment) error {
