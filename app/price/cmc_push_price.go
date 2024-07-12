@@ -97,7 +97,6 @@ func (c *CmcPushConn) listen() {
 			c.ErrChan <- fmt.Errorf("unexpected message type; %w", err)
 			return
 		}
-		log.Printf("Received message: %s\n", string(msg))
 		
 		investmentPrice, err := GetInvestmentPriceFromCmcPushMessage(msg, c.Investments)
 		if err != nil {
