@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/jchavannes/money/app/db"
-	"log"
 	"nhooyr.io/websocket"
 	"strconv"
 	"time"
@@ -75,7 +74,6 @@ func (c *CmcPushConn) Run() error {
 }
 
 func (c *CmcPushConn) subscribe() {
-	log.Println("Sending websocket subscribe message")
 	msg := GetCmcPushPriceSubscribeMessage(c.Investments)
 	if err := c.Conn.Write(c.Ctx, websocket.MessageText, []byte(msg)); err != nil {
 		c.ErrChan <- fmt.Errorf("error writing websocket message; %w", err)
@@ -120,7 +118,6 @@ func (c *CmcPushConn) listen() {
 				}
 
 				if len(neededPrices) == 0 {
-					log.Println("All prices received, closing connection")
 					c.Cancel()
 					return
 				}
