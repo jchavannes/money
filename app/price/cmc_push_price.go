@@ -98,7 +98,7 @@ func (c *CmcPushConn) listen() {
 			return
 		}
 		log.Printf("Received message: %s\n", string(msg))
-
+		
 		investmentPrice, err := GetInvestmentPriceFromCmcPushMessage(msg, c.Investments)
 		if err != nil {
 			c.ErrChan <- fmt.Errorf("error processing websocket message; %w", err)
@@ -152,6 +152,7 @@ func GetInvestmentPriceFromCmcPushMessage(msg []byte, investments []db.Investmen
 	for _, investment := range investments {
 		if cmcPushPriceJson.D.Id == GetIdFromSymbol(investment.Symbol) {
 			foundInvestment = &investment
+			break
 		}
 	}
 	if foundInvestment == nil {
