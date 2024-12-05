@@ -53,7 +53,7 @@ func CmcLatestV1(investments []db.Investment) error {
 		timestamp := date.Unix()
 		price := quote.Price
 
-		if quote.Price > 100000 || quote.Price < 0.0001 {
+		if quote.Price > 1000000 || quote.Price < 0.0001 {
 			continue
 		}
 		var foundInvestment db.Investment

@@ -96,7 +96,7 @@ func ParseCoinMarketCapV3(body []byte) ([]*TimePrice, error) {
 func saveInvestmentPrices(investment *db.Investment, prices []*TimePrice, lastItemTimestamp int64) error {
 	var totalRowsAdded int
 	for _, p := range prices {
-		if p.Price > 100000 || p.Price < 0.0001 || p.Time.Unix() < lastItemTimestamp {
+		if p.Price > 1000000 || p.Price < 0.0001 || p.Time.Unix() < lastItemTimestamp {
 			continue
 		}
 
