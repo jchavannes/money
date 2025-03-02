@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/jchavannes/jgo/jerr"
+	"github.com/jchavannes/jgo/jlog"
 	"github.com/jchavannes/money/app/price"
 	"github.com/jchavannes/money/web/server"
 	"github.com/spf13/cobra"
@@ -41,6 +42,7 @@ var (
 			if err != nil {
 				return jerr.Get("error parsing userId: "+args[0], err)
 			}
+			jlog.Logf("Updating for user %d\n", userId)
 			err = price.UpdateForUser(uint(userId))
 			if err != nil {
 				return jerr.Get("error updating user", err)
